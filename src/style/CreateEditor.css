@@ -1,0 +1,59 @@
+.create-editor-container {
+  min-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.create-editor-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-editor-form label {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #333;
+}
+
+.input-field,
+.text-area {
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.input-field:focus,
+.text-area:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.create-btn {
+  align-self: flex-start;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-btn:hover {
+  background-color: #0056b3;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
