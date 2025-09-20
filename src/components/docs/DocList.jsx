@@ -1,0 +1,28 @@
+import { useEffect } from "react";
+import docModel from "../../models/documents";
+import DocCard from "./DocCard";
+import "../../style/DocList.css";
+
+function DocList({ docs, setDocs }) {
+
+    async function fetchAllDocs() {
+        const allDocs = await docModel.getAllDocs();
+        setDocs(allDocs);
+    }
+
+    useEffect(() => {
+        fetchAllDocs();
+    }, []);
+
+    const docCards = docs.map((doc, index) => (
+        <DocCard key={index} doc={doc} />
+    ));
+
+    if (docCards.length > 0) {
+        return <div className="list">{docCards}</div>;
+    } else {
+        return <p className="notification">No documents in the database</p>;
+    }
+}
+
+export default DocList;
