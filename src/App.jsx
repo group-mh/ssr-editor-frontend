@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import docModel from "./models/documents";
+import Header from "./components/incl/Header";
+import Footer from "./components/incl/Footer";
+import DocList from "./components/docs/DocList";
+import CreateEditor from "./components/docs/CreateEditor";
+import UpdateDoc from "./components/docs/UpdateDoc";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [docs, setDocs] = useState([]);
+
+  useEffect(() => {
+    async function fetchDocs() {
+      const allDocs = await docModel.getAllDocs();
+      if (allDocs) setDocs(allDocs);
+    }
+    fetchDocs();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter basename={docModel.baseName}>
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<Navigate to="/docs" replace />} />
+          <Route path="/docs" element={<DocList docs={docs} setDocs={setDocs} />} />
+          <Route path="/create" element={<CreateEditor />} />
+          <Route path="/edit/:id" element={<UpdateDoc />} />
+          <Route path="*" element={<p>404 - Sidan finns inte</p>} />
+        </Routes>
+      </main>
+      <Footer />
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
