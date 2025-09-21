@@ -1,3 +1,21 @@
 .notification {
   text-align: center;
 }
+
+.card {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.edit-btn {
+  align-self: flex-start;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
