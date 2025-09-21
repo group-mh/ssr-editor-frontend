@@ -14,7 +14,7 @@ function DocCard({ doc }) {
   };
 
   const deleteDoc = async () => {
-    if (window.confirm("Säker på att du vill radera dokumentet?")) {
+    if (window.confirm("Are you sure you want to delete the document?")) {
       await docModel.deleteDoc(doc._id);
       window.location.reload();
     }
@@ -28,7 +28,7 @@ function DocCard({ doc }) {
           Edit
         </button>
         <button className="delete-btn" onClick={deleteDoc}>
-          Radera
+          Delete
         </button>
       </div>
     </div>

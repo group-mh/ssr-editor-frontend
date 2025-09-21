@@ -20,7 +20,7 @@ function UpdateDoc() {
     }
 
     const deleteDoc = async () => {
-      if (window.confirm("Säker på att du vill ta bort dokumentet?")) {
+      if (window.confirm("Are you sure you want to delete the document?")) {
         await docModel.deleteDoc(newDoc._id);
         navigate("/docs")
       }
@@ -56,7 +56,7 @@ function UpdateDoc() {
         />
         <div className="button-group">
           <button className="create-btn" onClick={saveText}>
-                Spara
+                Save
           </button>
 
           <button
@@ -64,7 +64,7 @@ function UpdateDoc() {
             className="back-btn"
             onClick={() => navigate("/docs")}
           >
-            Tillbaka
+            Back
           </button>
 
           <button
@@ -72,7 +72,7 @@ function UpdateDoc() {
             className="delete-btn"
             onClick={deleteDoc}
           >
-            Radera
+            Delete
           </button>
         </div>
       </form>

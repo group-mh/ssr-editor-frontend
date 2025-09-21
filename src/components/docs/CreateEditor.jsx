@@ -18,7 +18,6 @@ function CreateEditor() {
 
   async function saveText() {
     const response = await docModel.createDoc(newDoc);
-    console.log("Response from create:", response);
     navigate("/docs");
   }
 
@@ -47,7 +46,7 @@ function CreateEditor() {
         />
         <div className="button-group">
           <button className="create-btn" onClick={saveText}>
-            Spara
+            Save
           </button>
 
           <button
@@ -55,7 +54,7 @@ function CreateEditor() {
             className="back-btn"
             onClick={() => navigate("/docs")}
           >
-            Tillbaka
+            Back
           </button>
         </div>
       </form>
