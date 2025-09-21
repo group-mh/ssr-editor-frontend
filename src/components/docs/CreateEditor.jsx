@@ -16,7 +16,15 @@ function CreateEditor() {
     setNewDoc((prev) => ({ ...prev, [name]: value }));
   }
 
-  async function saveText() {
+  async function saveText(e) {
+    
+    e.preventDefault();
+
+    if (!newDoc.title || !newDoc.content ){
+      alert("Enter title and text!");
+      return;
+    }
+
     const response = await docModel.createDoc(newDoc);
     navigate("/docs");
   }
