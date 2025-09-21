@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import docModel from "../../models/documents";
+import "../../style/CreateEditor.css";
 
 function UpdateDoc() {
     const location = useLocation();
@@ -13,53 +14,56 @@ function UpdateDoc() {
         content: location.state.doc.content || "",
     });
 
-    console.log("location.state:", location.state);
-
-    function changeTitle(event) {
-        const { name, value } = event.target;
-        setNewDoc(prev => ({ ...prev, [name]: value }));
-    }
-
-    function changeText(event) {
+    function handleChange(event){
         const { name, value } = event.target;
         setNewDoc(prev => ({ ...prev, [name]: value }));
     }
 
     async function saveText() {
-        if (!newDoc.title || !newDoc.content) {
-            alert("Please enter title and text");
-            return;
-        }
-
         await docModel.updateDoc(newDoc);
         navigate("/docs");
     }
 
     return (
-        <div>
-            <div>
-                <button className="create-btn" onClick={saveText}>
-                    Update
-                </button>
-            </div>
+       <div className="editor-container">
+      <form className="editor-form" onSubmit={(e) => e.preventDefault()}>
+        {" "}
+        <label htmlFor="title">Titel</label>
+        <input
+          id="title"
+          name="title"
+          className="input-field"
+          value={newDoc.title}
+          onChange={handleChange}
+          required
+        />
+        <label htmlFor="content">Text</label>
+        <textarea
+          id="content"
+          name="content"
+          className="text-area"
+          value={newDoc.content}
+          onChange={handleChange}
+          rows="10"
+          required
+        />
+        <div className="button-group">
+          <button className="create-btn" onClick={saveText}>
+                Spara
+          </button>
 
-            <div>
-                <input
-                    value={newDoc.title}
-                    className="title-input"
-                    onChange={changeTitle}
-                    name="title"
-                />
-                <textarea
-                    value={newDoc.content}
-                    className="text-area"
-                    onChange={changeText}
-                    name="content"
-                    rows="25"
-                    style={{ width: "100%", marginTop: "1em" }}
-                />
-            </div>
+          <button
+            type="button"
+            className="back-btn"
+            onClick={() => navigate("/docs")}
+          >
+            Tillbaka
+          </button>
         </div>
+      </form>
+    </div>
+
+
     );
 }
 

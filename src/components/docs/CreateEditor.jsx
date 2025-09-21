@@ -23,8 +23,8 @@ function CreateEditor() {
   }
 
   return (
-    <div className="create-editor-container">
-      <form className="create-editor-form" onSubmit={(e) => e.preventDefault()}>        <label htmlFor="title">Titel</label>
+    <div className="editor-container">
+      <form className="editor-form" onSubmit={(e) => e.preventDefault()}>        <label htmlFor="title">Titel</label>
         <input
           id="title"
           name="title"
