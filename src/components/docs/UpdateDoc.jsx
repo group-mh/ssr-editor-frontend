@@ -19,6 +19,13 @@ function UpdateDoc() {
         setNewDoc(prev => ({ ...prev, [name]: value }));
     }
 
+    const deleteDoc = async () => {
+      if (window.confirm("Säker på att du vill ta bort dokumentet?")) {
+        await docModel.deleteDoc(newDoc._id);
+        navigate("/docs")
+      }
+    };
+
     async function saveText() {
         await docModel.updateDoc(newDoc);
         navigate("/docs");
@@ -58,6 +65,14 @@ function UpdateDoc() {
             onClick={() => navigate("/docs")}
           >
             Tillbaka
+          </button>
+
+          <button
+            type="button"
+            className="delete-btn"
+            onClick={deleteDoc}
+          >
+            Radera
           </button>
         </div>
       </form>
