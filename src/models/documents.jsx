@@ -51,7 +51,21 @@ const docModel = {
 
         const result = await response.json();
         return result;
+    },
+
+    deleteDoc: async function deleteDoc(id) {
+     const response = await fetch(
+            `${docModel.baseUrl}/docs/${id}`,
+            {
+                method: "DELETE",
+            }
+        );
+
+        const result = await response.json();
+        return result;
     }
 };
+
+
 
 export default docModel;
