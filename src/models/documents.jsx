@@ -37,10 +37,11 @@ const docModel = {
 
  
     updateDoc: async function updateDoc(updateDoc) {
+        const { _id, ...updateData } = updateDoc;
         const response = await fetch(
-            `${docModel.baseUrl}/docs/${updateDoc._id}`,
+            `${docModel.baseUrl}/docs/${_id}`,
             {
-                body: JSON.stringify(updateDoc),
+                body: JSON.stringify(updateData),
                 headers: {
                     "content-type": "application/json",
                 },

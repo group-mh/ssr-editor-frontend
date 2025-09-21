@@ -6,14 +6,14 @@ import "../../style/CreateEditor.css";
 function CreateEditor() {
   const [newDoc, setNewDoc] = useState({
     title: "",
-    content: ""
+    content: "",
   });
 
   const navigate = useNavigate();
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setNewDoc(prev => ({ ...prev, [name]: value }));
+    setNewDoc((prev) => ({ ...prev, [name]: value }));
   }
 
   async function saveText() {
@@ -24,7 +24,9 @@ function CreateEditor() {
 
   return (
     <div className="editor-container">
-      <form className="editor-form" onSubmit={(e) => e.preventDefault()}>        <label htmlFor="title">Titel</label>
+      <form className="editor-form" onSubmit={(e) => e.preventDefault()}>
+        {" "}
+        <label htmlFor="title">Titel</label>
         <input
           id="title"
           name="title"
@@ -33,7 +35,6 @@ function CreateEditor() {
           onChange={handleChange}
           required
         />
-
         <label htmlFor="content">Text</label>
         <textarea
           id="content"
@@ -44,10 +45,7 @@ function CreateEditor() {
           rows="10"
           required
         />
-
         <div className="button-group">
-          
-
           <button className="create-btn" onClick={saveText}>
             Spara
           </button>
