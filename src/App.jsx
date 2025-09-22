@@ -14,6 +14,7 @@ function App() {
   useEffect(() => {
     async function fetchDocs() {
       const allDocs = await docModel.getAllDocs();
+      console.log(allDocs);
       if (allDocs) setDocs(allDocs);
     }
     fetchDocs();

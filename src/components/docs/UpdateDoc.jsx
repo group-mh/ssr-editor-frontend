@@ -35,7 +35,7 @@ function UpdateDoc() {
        <div className="editor-container">
       <form className="editor-form" onSubmit={(e) => e.preventDefault()}>
         {" "}
-        <label htmlFor="title">Titel</label>
+        <label htmlFor="title">Title</label>
         <input
           id="title"
           name="title"

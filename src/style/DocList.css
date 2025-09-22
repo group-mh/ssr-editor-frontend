@@ -7,6 +7,10 @@
   margin: 0 auto;
 }
 
+.card h2{
+  margin-bottom: 2px;
+}
+
 .edit-btn {
   align-self: flex-start;
   padding: 10px 20px;
