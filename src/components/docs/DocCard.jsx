@@ -6,7 +6,7 @@ function DocCard({ doc }) {
   const navigate = useNavigate();
 
   const editDoc = () => {
-    navigate("/edit/${doc._id}", {
+    navigate(`/edit/${doc._id}`, {
       replace: true,
       state: {
         doc: doc,
