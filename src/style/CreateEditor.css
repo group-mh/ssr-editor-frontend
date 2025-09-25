@@ -1,5 +1,6 @@
   .editor-container {
-    min-width: 600px;
+    width: 100%;
+    max-width: 600px;
     margin: 40px auto;
     padding: 30px;
     background-color: #fafafa;
@@ -57,3 +58,5 @@
     gap: 14px;
     margin-top: 10px;
   }
+
+ 
