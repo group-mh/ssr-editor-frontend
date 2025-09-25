@@ -1,6 +1,6 @@
   .editor-container {
     width: 100%;
-    max-width: 600px;
+    min-width: 700px;
     margin: 40px auto;
     padding: 30px;
     background-color: #fafafa;
@@ -57,6 +57,14 @@
     display: flex;
     gap: 14px;
     margin-top: 10px;
+  }
+
+  @media (max-width: 700px) {
+    .editor-container {
+      max-width: 700px;
+      min-width: 0;
+    }
+    
   }
 
  
