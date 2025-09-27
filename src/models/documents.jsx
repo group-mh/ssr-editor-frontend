@@ -7,7 +7,7 @@
         : "/", */
 
     const docModel = {
-        baseUrl: "http://localhost:1337",
+        baseUrl: "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net",
         baseName: "/",
 
     getAllDocs: async function getAllDocs() {
