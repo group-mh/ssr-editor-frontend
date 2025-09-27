@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://mats-jonis.github.io/ssr-editor-frontend",
+  "homepage": "https://group-mh.github.io/ssr-editor-frontend/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
