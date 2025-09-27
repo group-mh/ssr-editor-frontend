@@ -1,3 +1,53 @@
 .notification {
   text-align: center;
 }
+
+.card {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.card h2{
+  margin-bottom: 2px;
+}
+
+.edit-btn,
+.back-btn,
+.delete-btn {
+  align-self: flex-start;
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.edit-btn {
+  background-color: #007bff;;
+}
+
+.edit-btn:hover {
+  background-color: #007bffd1;
+}
+
+.back-btn {
+  background-color: #6c757d;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+.delete-btn {
+  background-color: #ff0000;
+}
+
+.delete-btn:hover {
+  background-color: #ff000092;
+}

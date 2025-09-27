@@ -1,56 +1,107 @@
-const docModel = {
+/* const docModel = {
     baseUrl: window.location.href.includes("localhost")
         ? "http://localhost:1337"
         : "",
     baseName: window.location.href.includes("localhost")
         ? "/"
-        : "/",
+        : "/", */
+
+    const docModel = {
+        baseUrl: "http://localhost:1337",
+        baseName: "/",
 
     getAllDocs: async function getAllDocs() {
-        const response = await fetch(`${docModel.baseUrl}/docs`, {
-            headers: {
-                "content-type": "application/json",
-            },
-            method: "GET",
-        });
 
-        const result = await response.json();
-        return result.data;
+        try {        
+            const response = await fetch(`${docModel.baseUrl}/docs`, {
+                headers: {
+                    "content-type": "application/json",
+                },
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            return result.data;
+        } catch (error) {
+            console.error("getAllDocs error:", error.message);
+            return [];
+        }        
     },
 
     createDoc: async function createDoc(newDoc) {
-        const response = await fetch(`${docModel.baseUrl}/docs`, {
-            body: JSON.stringify(newDoc),
-            headers: {
-                "content-type": "application/json",
-            },
-            method: "POST",
-        });
+        try {
+            const response = await fetch(`${docModel.baseUrl}/docs`, {
+                body: JSON.stringify(newDoc),
+                headers: {
+                    "content-type": "application/json",
+                },
+                method: "POST",
+            });
 
-        const result = await response.json();
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
 
-
-    console.log("createDoc response result:", result);
-
-    return result;
+            const result = await response.json();
+            console.log("createDoc response result:", result);
+            return result;
+        } catch (error) {
+            console.error("createDoc error:", error.message);
+            return null;
+        }
     },
 
- 
     updateDoc: async function updateDoc(updateDoc) {
+        try {
+            const { _id, ...updateData } = updateDoc;
         const response = await fetch(
-            `${docModel.baseUrl}/docs/${updateDoc._id}`,
+            `${docModel.baseUrl}/docs/${_id}`,
             {
-                body: JSON.stringify(updateDoc),
+                body: JSON.stringify(updateData),
                 headers: {
                     "content-type": "application/json",
                 },
                 method: "PUT",
+            });
+        
+            if(!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
             }
-        );
+            
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error("updateDoc error:", error.message);
+            return null;
+        }
+        
+    },
 
-        const result = await response.json();
-        return result;
+    deleteDoc: async function deleteDoc(id) {
+        try {
+            const response = await fetch(
+            `${docModel.baseUrl}/docs/${id}`,
+            {
+                method: "DELETE",
+            });
+
+            if(!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error("deleteDoc error:", error.message);
+            return null;
+        }
     }
 };
+
+
 
 export default docModel;

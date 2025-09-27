@@ -6,25 +6,34 @@ import "../../style/CreateEditor.css";
 function CreateEditor() {
   const [newDoc, setNewDoc] = useState({
     title: "",
-    content: ""
+    content: "",
   });
 
   const navigate = useNavigate();
 
   function handleChange(event) {
     const { name, value } = event.target;
-    setNewDoc(prev => ({ ...prev, [name]: value }));
+    setNewDoc((prev) => ({ ...prev, [name]: value }));
   }
 
-  async function saveText() {
+  async function saveText(e) {
+    
+    e.preventDefault();
+
+    if (!newDoc.title || !newDoc.content ){
+      alert("Enter title and text!");
+      return;
+    }
+
     const response = await docModel.createDoc(newDoc);
-    console.log("Response from create:", response);
     navigate("/docs");
   }
 
   return (
-    <div className="create-editor-container">
-      <form className="create-editor-form" onSubmit={(e) => e.preventDefault()}>        <label htmlFor="title">Titel</label>
+    <div className="editor-container">
+      <form className="editor-form" onSubmit={(e) => e.preventDefault()}>
+        {" "}
+        <label htmlFor="title">Title</label>
         <input
           id="title"
           name="title"
@@ -33,7 +42,6 @@ function CreateEditor() {
           onChange={handleChange}
           required
         />
-
         <label htmlFor="content">Text</label>
         <textarea
           id="content"
@@ -44,12 +52,9 @@ function CreateEditor() {
           rows="10"
           required
         />
-
         <div className="button-group">
-          
-
           <button className="create-btn" onClick={saveText}>
-            Spara
+            Save
           </button>
 
           <button
@@ -57,7 +62,7 @@ function CreateEditor() {
             className="back-btn"
             onClick={() => navigate("/docs")}
           >
-            Tillbaka
+            Back
           </button>
         </div>
       </form>

@@ -10,8 +10,8 @@ function Header() {
         SSR Editor
       </h1>
       <nav className="nav-buttons">
-        <button className="nav-btn" onClick={() => navigate("/")}>Hem</button>
-        <button className="nav-btn" onClick={() => navigate("/create")}>Skapa dokument</button>
+        <button className="nav-btn" onClick={() => navigate("/")}>Home</button>
+        <button className="nav-btn" onClick={() => navigate("/create")}>Create document</button>
       </nav>
     </header>
   );

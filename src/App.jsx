@@ -14,6 +14,7 @@ function App() {
   useEffect(() => {
     async function fetchDocs() {
       const allDocs = await docModel.getAllDocs();
+      console.log(allDocs);
       if (allDocs) setDocs(allDocs);
     }
     fetchDocs();
@@ -28,7 +29,7 @@ function App() {
           <Route path="/docs" element={<DocList docs={docs} setDocs={setDocs} />} />
           <Route path="/create" element={<CreateEditor />} />
           <Route path="/edit/:id" element={<UpdateDoc />} />
-          <Route path="*" element={<p>404 - Sidan finns inte</p>} />
+          <Route path="*" element={<p>404 - Page not found</p>} />
         </Routes>
       </main>
       <Footer />
