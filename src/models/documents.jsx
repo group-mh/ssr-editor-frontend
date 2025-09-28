@@ -8,7 +8,7 @@
 
     const docModel = {
         baseUrl: "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net",
-        baseName: "/",
+        baseName: "/ssr-editor-frontend/",
 
     getAllDocs: async function getAllDocs() {
 
