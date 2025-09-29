@@ -23,7 +23,7 @@ jobs:
     - name: Start Vite dev server
       run: npm run dev &
     - name: Wait for server
-      run: npx wait-on http://localhost:5173/ssr-editor.frontend/create
+      run: npx wait-on http://localhost:5173/ --timeout 30000
     - name: Run Cypress tests
       run: npx cypress run
     - name: Deploy to GitHub Pages
