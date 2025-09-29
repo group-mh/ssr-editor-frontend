@@ -21,9 +21,9 @@ jobs:
     - name: Build project
       run: npm run build
     - name: Serve production build
-      run: npx serve -s dist -l 5173 &
+      run: npx serve -s dist -l 5173 --single &
     - name: Wait for server
-      run: npx wait-on http://localhost:5173
+      run: npx wait-on http://localhost:5173/ssr-editor-frontend/create
     - name: Run Cypress tests
       run: npx cypress run
     - name: Deploy to GitHub Pages
