@@ -20,10 +20,12 @@ jobs:
       run: npm install
     - name: Build project
       run: npm run build
-    - name: start server
-      run: npm run dev
-    - name: Run tests
-      run: npm test
+    - name: Serve production build
+      run: npx serve -s dist -l 5173 &
+    - name: Wait for server
+      run: npx wait-on http://localhost:5173
+    - name: Run Cypress tests
+      run: npx cypress run
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with:
