@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
-    "test": "cypress run"
+    "test": "cypress:run"
   },
   "dependencies": {
     "react": "^19.1.1",
