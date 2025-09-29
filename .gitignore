@@ -6,6 +6,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+!cypress/e2e/*.cy.js
+cypress/screenshots/
+cypress/videos/
+wget-log
 
 node_modules
 dist
