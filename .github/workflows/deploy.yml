@@ -21,7 +21,7 @@ jobs:
     - name: Build project
       run: npm run build
     - name: start server
-      run: npm run dev & wait-on http://localhost:5173 
+      run: npm run dev
     - name: Run tests
       run: npm test
     - name: Deploy to GitHub Pages
