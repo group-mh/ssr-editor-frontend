@@ -1,20 +1,24 @@
-const docModel = {
+/* const docModel = {
     baseUrl: window.location.href.includes("localhost")
-        ? "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net"
-        : "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net",
+        ? "http://localhost:1337"
+        : "",
     baseName: window.location.href.includes("localhost")
         ? "/"
-        : "/",
+        : "/", */
 
-        getAllDocs: async function getAllDocs() {
+    const docModel = {
+        baseUrl: "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net",
+        baseName: "/ssr-editor-frontend/",
 
-            try {        
-                const response = await fetch(`${docModel.baseUrl}/docs`, {
-                    headers: {
-                        "content-type": "application/json",
-                    },
-                    method: "GET",
-                });
+    getAllDocs: async function getAllDocs() {
+
+        try {        
+            const response = await fetch(`${docModel.baseUrl}/docs`, {
+                headers: {
+                    "content-type": "application/json",
+                },
+                method: "GET",
+            });
 
                 if (!response.ok) {
                     throw new Error(`Response status: ${response.status}`);
