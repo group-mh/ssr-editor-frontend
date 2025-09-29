@@ -14,7 +14,9 @@ describe("Create document", () => {
             body: { _id: "123", title: "New Doc"},
         }).as("createDoc");
 
-        cy.visit("/create");
+    
+
+        cy.visit("/ssr-editor-frontend/create");
         cy.wait("@getDocsInit")
     });
 
@@ -31,7 +33,7 @@ describe("Create document", () => {
 
         cy.wait("@createDoc");
 
-        cy.location("pathname").should("eq", "/docs");
+        cy.location("pathname").should("eq", "/ssr-editor-frontend/docs");
         cy.wait("@getDocsAfterCreate");
 
         cy.contains("New Doc").should("be.visible");

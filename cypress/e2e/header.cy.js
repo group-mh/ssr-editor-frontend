@@ -11,7 +11,7 @@ describe("ssr-editor app", () => {
 
   it("navigates to docs and shows all documents", () => {
     
-    cy.visit("/docs");
+    cy.visit("/ssr-editor-frontend/docs");
 
     //cy.contains("Documents").should("be.visible");
 

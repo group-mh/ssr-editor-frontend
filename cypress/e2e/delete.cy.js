@@ -25,7 +25,7 @@ describe("Delete document", () => {
       return true;
     });
 
-    cy.visit("/docs");
+    cy.visit("/ssr-editor-frontend/docs");
     cy.wait("@getDocs");
     cy.contains("h2", DOC.title).should("be.visible");
 

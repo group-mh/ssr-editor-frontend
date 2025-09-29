@@ -21,7 +21,7 @@ describe("Docs page (stubbed)", () => {
     cy.visit("/");
     cy.wait("@getDocs");
 
-    cy.location("pathname").should("eq", "/docs");
+    cy.location("pathname").should("eq", "/ssr-editor-frontend/docs");
 
     cy.contains("Doc A").should("be.visible");
     cy.contains("Doc B").should("be.visible");
