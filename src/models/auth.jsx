@@ -7,7 +7,7 @@ const auth = {
 
   login: async function (user) {
     try {
-      const response = await fetch(`${this.baseUrl}/auth/login`, {
+      const response = await fetch(`${this.baseUrl}/login`, {
         method: "POST",
         body: JSON.stringify(user),
         headers: {
@@ -30,7 +30,7 @@ const auth = {
 
   register: async function (user) {
     try {
-      const response = await fetch(`${this.baseUrl}/auth/register`, {
+      const response = await fetch(`${this.baseUrl}/register`, {
         method: "POST",
         body: JSON.stringify(user),
         headers: {

@@ -1,0 +1,31 @@
+.login-form {
+    display: flex;
+    flex-direction: column;
+    padding: 0em;
+}
+
+.login-form input {
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.login-form button {
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.register-btn{
+    font-size: 16px;
+}
+
+.register-btn:hover {
+    box-shadow: 0px, 0px, 6px, 0px rgb(104, 104, 228);
+}
+
+.login-btn {
+    font-size: 16px;
+}
+
+.register-btn:hover {
+    box-shadow: 0px, 0px, 6px, 0px rgb(84, 219, 78);
+}

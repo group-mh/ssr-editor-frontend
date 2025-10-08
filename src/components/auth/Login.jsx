@@ -33,20 +33,25 @@ function Login({ setToken, user = {}, setUser }) {
           ? await authModel.login(user)
           : await authModel.register(user);
 
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+
       if (result?.errors?.message) {
         setError(result.errors.message);
         return;
       }
 
-      if (result?.data?.token) {
-        setToken(result.data.token);
-        if (mode === "login") {
-          navigate("/");
-        }
+      if (mode === "login" && result.token) {
+        setToken(result.token);
+        navigate("/");
+        return;
       }
 
       if (mode === "register" && !result.errors) {
         setMessage("Registration successful, you are now able to login.");
+        setUser({ email: "", password: ""});
       }
     } catch (err) {
       setError("Unexpected error occurred. Please try again.");
