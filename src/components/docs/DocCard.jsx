@@ -16,6 +16,15 @@ function DocCard({ doc }) {
 
   const doc_date = doc.created_at ? dateFormatted(doc.created_at) : null;
 
+  const inviteDoc = () => {
+    navigate(`/invite/${doc._id}`, {
+      replace: true,
+      state: {
+        doc: doc,
+      },
+    });
+  }
+
   const deleteDoc = async () => {
     if (window.confirm("Are you sure you want to delete the document?")) {
       await docModel.deleteDoc(doc._id);
@@ -33,6 +42,9 @@ function DocCard({ doc }) {
         </button>
         <button className="delete-btn" onClick={deleteDoc}>
           Delete
+        </button>
+        <button className="invite-btn" onClick={inviteDoc}>
+          Invite
         </button>
       </div>
     </div>

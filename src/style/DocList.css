@@ -36,6 +36,14 @@
   background-color: #007bffd1;
 }
 
+.invite-btn {
+  background-color: #ffea00;
+}
+
+.invite-btn:hover {
+  background-color:  #ffea00cd;
+}
+
 .back-btn {
   background-color: #6c757d;
 }

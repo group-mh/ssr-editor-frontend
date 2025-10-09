@@ -7,6 +7,7 @@ import DocList from "./components/docs/DocList";
 import MyDocList from "./components/docs/MyDocList";
 import CreateEditor from "./components/docs/CreateEditor";
 import UpdateDoc from "./components/docs/UpdateDoc";
+import Invite from "./components/invite/inviteForm";
 import Login from "./components/auth/Login";
 import "./App.css";
 
@@ -67,6 +68,10 @@ function App() {
           <Route path="/edit/:id" 
           element={
           token ? <UpdateDoc /> : <Navigate to="/login" replace />
+        } />
+        <Route path="/invite/:id" 
+          element={
+          token ? <Invite /> : <Navigate to="/login" replace />
         } />
         <Route
           path="/login"
