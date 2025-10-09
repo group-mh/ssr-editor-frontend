@@ -31,7 +31,7 @@ function CreateEditor() {
     };
 
     const response = await docModel.createDoc(docUsername);
-    navigate("/docs");
+    navigate("/my-docs");
   }
 
   return (
