@@ -21,6 +21,8 @@ const auth = {
         throw new Error(result.message || "Login failed");
       }
 
+      localStorage.setItem("token", result.token);
+
       return result;
     } catch (err) {
       console.error("login error:", err);
@@ -28,7 +30,16 @@ const auth = {
     }
   },
 
+  logout: function () {
+    localStorage.removeItem("token");
+  },
+
+  getToken: function () {
+    return localStorage.getItem("token");
+  },
+
   register: async function (user) {
+    console.log("Register data:", user);
     try {
       const response = await fetch(`${this.baseUrl}/register`, {
         method: "POST",

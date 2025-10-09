@@ -1,109 +1,140 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import authModel from "../../models/auth";
+import { jwtDecode } from "jwt-decode";
+import auth from "../../models/auth";
 
-function Login({ setToken, user = {}, setUser }) {
+export default function Login( { setToken, setUser}) {
+  const [mode, setMode] = useState("login");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("");
   const navigate = useNavigate();
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (user?.token) {
-      navigate("/");
+    const token = auth.getToken();
+    if (token) {
+      navigate("/my-docs")
     }
-  }, [user, navigate]);
+  }, [navigate]);
 
-  function changeHandler(event) {
-    const { name, value } = event.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  async function handleSubmit(mode) {
-    setMessage("");
-    setError("");
-
-    if (!user.email || !user.password) {
-      setError("Email, password are required");
-      return;
-    }
-
-    try {
-      const result =
-        mode === "login"
-          ? await authModel.login(user)
-          : await authModel.register(user);
+    if (mode === "login") {
+      const result = await auth.login({
+        usernameOrEmail: email,
+        password,
+      });
 
       if (result.error) {
-        setError(result.error);
-        return;
-      }
-
-      if (result?.errors?.message) {
-        setError(result.errors.message);
-        return;
-      }
-
-      if (mode === "login" && result.token) {
+        setStatus(`Login failed: ${result.error}`);
+      } else {
+        setStatus("Login successful!");
         setToken(result.token);
-        navigate("/");
-        return;
-      }
 
-      if (mode === "register" && !result.errors) {
-        setMessage("Registration successful, you are now able to login.");
-        setUser({ email: "", password: ""});
+        try {
+          const decoded = jwtDecode(result.token);
+          console.log("Decoded JWT:", decoded);
+
+          const userFromToken = {
+            email: decoded.username || decoded.email,
+            id: decoded.id
+          };
+        
+        setUser(userFromToken);
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(userFromToken));
+        } catch (err) {
+          console.error("Failed to decode JWT:", err);
+          setUser({});
+        }
+
+        navigate("/my-docs");
       }
-    } catch (err) {
-      setError("Unexpected error occurred. Please try again.");
-      console.error(err);
-      return;
+    } else {
+      const result = await auth.register({
+        username: username || email,
+        email,
+        password,
+      });
+
+      if (result.error) {
+        setStatus(`Register failed: ${result.error}`);
+      } else {
+        setStatus("Registration successful.");
+        setMode("login");
+      }
     }
-  }
+};
 
-  return (
-    <div className="login-form">
-      <h1 className="title">Login / Register</h1>
+return (
+  <form onSubmit={handleSubmit}>
+    <h2>{mode === "login" ? "Login" : "Register"}</h2>
 
-      {error && <p className="error-message">{error}</p>}
-      {message && <p className="success-message">{message}</p>}
-
-      <label htmlFor="email">Email:</label>
+    {mode === "register" && (
       <input
-        type="email"
-        id="email"
-        name="email"
-        value={user.email || ""}
-        onChange={changeHandler}
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
         required
-      />
+        />
+    )}
 
-      <label htmlFor="password">Password:</label>
+    <input
+        type="email"
+        placeholder="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        />
+
       <input
         type="password"
-        id="password"
-        name="password"
-        value={user.password || ""}
-        onChange={changeHandler}
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         required
-      />
+        />
 
-      <button
-        type="button"
-        className="register-btn"
-        onClick={() => handleSubmit("register")}
-      >
-        Register
-      </button>
+        <button type="submit">{mode === "login" ? "Login" : "Register"}</button>
 
-      <button
-        type="button"
-        className="login-btn"
-        onClick={() => handleSubmit("login")}
-      >
-        Login
-      </button>
-    </div>
-  );
+        {status && <p>{status}</p>}
+
+        <p>
+          {mode === "login" ? (
+            <>
+              Don't have an account?{" "}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("register");
+                  setStatus("");
+                }}
+                >
+                  Register here
+                </button>
+              </>
+           ) : (
+            <>
+              Already have an account?{" "}
+              
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("login");
+                  setStatus("");
+                }}
+                 >
+                  Login here
+                </button>
+            </>
+          )}
+        </p>
+  </form>
+)
+
+
 }
 
-export default Login;

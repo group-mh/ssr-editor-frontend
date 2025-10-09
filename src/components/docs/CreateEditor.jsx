@@ -24,8 +24,13 @@ function CreateEditor() {
       alert("Enter title and text!");
       return;
     }
+    const user = JSON.parse(localStorage.getItem("user"))
+    const docUsername = {
+      ...newDoc,
+      username: user?.email || user?.username,
+    };
 
-    const response = await docModel.createDoc(newDoc);
+    const response = await docModel.createDoc(docUsername);
     navigate("/docs");
   }
 

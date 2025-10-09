@@ -4,6 +4,7 @@ import docModel from "./models/documents";
 import Header from "./components/incl/Header";
 import Footer from "./components/incl/Footer";
 import DocList from "./components/docs/DocList";
+import MyDocList from "./components/docs/MyDocList";
 import CreateEditor from "./components/docs/CreateEditor";
 import UpdateDoc from "./components/docs/UpdateDoc";
 import Login from "./components/auth/Login";
@@ -13,6 +14,21 @@ function App() {
   const [docs, setDocs] = useState([]);
   const [user, setUser] = useState({});
   const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) setToken(savedToken);
+    
+    const savedUser = localStorage.getItem("user");
+    if (savedUser && savedUser !=="undefined") {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.error("Failed to parse user from localStorage:", e)
+        localStorage.removeItem("user");
+      }
+    } 
+  }, []);
 
   useEffect(() => {
     async function fetchDocs() {
@@ -26,15 +42,24 @@ function App() {
   function handleLogout() {
     setToken("");
     setUser({});
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   }
 
   return (
     <BrowserRouter basename={docModel.baseName}>
-      <Header user={user} onLogout={handleLogout} />
+      <Header user={user} token={token} onLogout={handleLogout} />
       <main>
         <Routes>
           <Route path="/" element={<Navigate to="/docs" replace />} />
           <Route path="/docs" element={<DocList docs={docs} setDocs={setDocs} />} />
+          <Route path="/my-docs" element={
+            token ? ( <MyDocList docs={docs} setDocs={setDocs} />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+          } 
+          />
           <Route path="/create" element={
             token ? <CreateEditor /> : <Navigate to="/login" replace />
             } 
