@@ -1,8 +1,5 @@
 const auth = {
-  baseUrl: window.location.href.includes("localhost")
-    ? "http://localhost:1337"
-    : "http://localhost:1337",
-
+  baseUrl: "http://localhost:1337",
   token: "",
 
   login: async function (user) {
