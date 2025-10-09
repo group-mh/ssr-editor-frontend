@@ -22,7 +22,7 @@ function Header({ user, token, onLogout }) {
         {token ? (
           <>
             <button className="nav-btn" onClick={onLogout}>Logout</button>
-            <span className="user-info">Logged in as: {user && user.email ? user.email : "Unknown"}</span>
+            <span className="user-info">Logged in as: {user && user.username ? user.username : "Unknown"}</span>
           </>
         ) : (
         <button className="nav-btn" onClick={() => navigate("/login")}>Login</button>
