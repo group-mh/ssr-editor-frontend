@@ -25,12 +25,12 @@ function CreateEditor() {
       return;
     }
     const user = JSON.parse(localStorage.getItem("user"))
-    const docUsername = {
+    const docAuthor = {
       ...newDoc,
-      username: user?.email || user?.username,
+      author: [user?.username],
     };
 
-    const response = await docModel.createDoc(docUsername);
+    const response = await docModel.createDoc(docAuthor);
     navigate("/my-docs");
   }
 

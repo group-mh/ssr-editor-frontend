@@ -38,7 +38,7 @@ export default function Login( { setToken, setUser}) {
           console.log("Decoded JWT:", decoded);
 
           const userFromToken = {
-            email: decoded.username || decoded.email,
+            username: decoded.username,
             id: decoded.id
           };
         
