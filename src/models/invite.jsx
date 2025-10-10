@@ -5,7 +5,7 @@ const inviteModel = {
     try {
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
-      const from = user?.email;
+      const from = user?.username;
 
       console.log("sending invite, docid:", docId, "email:", email, "from", from);
 
