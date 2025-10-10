@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import docModel from "../../models/documents";
 import "../../style/DocCard.css";
 
-function DocCard({ doc }) {
+function DocCard({ doc, showButtons = true }) {
   const navigate = useNavigate();
 
   const editDoc = () => {
@@ -36,7 +36,8 @@ function DocCard({ doc }) {
     <div className="card">
       <h2>{doc.title}</h2>
       <p className="date">{doc_date}</p>
-      <div className="button-group">
+      {showButtons && (
+        <div className="button-group">
         <button className="edit-btn" onClick={editDoc}>
           Edit
         </button>
@@ -47,6 +48,7 @@ function DocCard({ doc }) {
           Invite
         </button>
       </div>
+      )}
     </div>
   );
 }

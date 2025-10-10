@@ -20,7 +20,7 @@ function DocList({ docs, setDocs }) {
     }, []);
 
     const docCards = docs.map((doc, index) => (
-        <DocCard key={index} doc={doc} />
+        <DocCard key={index} doc={doc} showButtons={false}/>
     ));
 
     if (docCards.length > 0) {

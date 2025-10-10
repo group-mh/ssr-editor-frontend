@@ -26,7 +26,7 @@ function MyDocList({ docs, setDocs }) {
     fetchMyDocs();
   }, [setDocs]);
 
-  const docCards = docs.map((doc, index) => <DocCard key={index} doc={doc} />);
+  const docCards = docs.map((doc, index) => <DocCard key={index} doc={doc} showButtons={true}/>);
 
   if (docCards.length > 0) {
     return <div className="list">{docCards}</div>;
