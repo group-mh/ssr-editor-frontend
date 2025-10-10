@@ -37,7 +37,7 @@ function DocCard({ doc, showButtons = true }) {
       <h2>{doc.title}</h2>
       <div className="doc-info">
         <p className="date">Created: {doc_date}</p>
-        <p className="author">Author: {doc.author}</p>
+        <p className="author">Author: {doc.author.join(", ")}</p>
       </div>
       {showButtons && (
         <div className="button-group">

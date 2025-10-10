@@ -93,6 +93,7 @@ const docModel = {
       }
 
       const result = await response.json();
+      // console.log("updateDoc response:", result);
       return result;
     } catch (error) {
       console.error("updateDoc error:", error.message);
