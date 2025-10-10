@@ -39,7 +39,8 @@ export default function Login( { setToken, setUser}) {
 
           const userFromToken = {
             username: decoded.username,
-            id: decoded.id
+            id: decoded.id,
+            email: decoded.email
           };
         
         setUser(userFromToken);

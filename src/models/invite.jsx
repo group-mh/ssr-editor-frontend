@@ -4,8 +4,10 @@ const inviteModel = {
   sendInvite: async function (docId, email) {
     try {
       const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user"));
+      const from = user?.email;
 
-      console.log("sending invite to docId:", docId, "email:", email)
+      console.log("sending invite, docid:", docId, "email:", email, "from", from);
 
       const response = await fetch(`${inviteModel.baseUrl}/docs/${docId}/invite`, {
         headers: {
@@ -13,7 +15,7 @@ const inviteModel = {
           Authorization: `Bearer ${token}`,
         },
         method: "POST",
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, from }),
       });
       
       const result = await response.json();
