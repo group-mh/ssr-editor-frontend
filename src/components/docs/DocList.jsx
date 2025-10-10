@@ -12,6 +12,8 @@ function DocList({ docs, setDocs }) {
 
     async function fetchAllDocs() {
         const allDocs = await docModel.getAllDocs();
+
+        const sortedDocs = allDocs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setDocs(allDocs);
     }
 
