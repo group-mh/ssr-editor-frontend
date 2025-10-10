@@ -35,7 +35,10 @@ function DocCard({ doc, showButtons = true }) {
   return (
     <div className="card">
       <h2>{doc.title}</h2>
-      <p className="date">{doc_date}</p>
+      <div className="doc-info">
+        <p className="date">Created: {doc_date}</p>
+        <p className="author">Author: {doc.author}</p>
+      </div>
       {showButtons && (
         <div className="button-group">
         <button className="edit-btn" onClick={editDoc}>
