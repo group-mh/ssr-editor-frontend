@@ -17,7 +17,7 @@ function MyDocList({ docs, setDocs }) {
       }
 
       const myDocs = allDocs.filter(
-        (doc) => doc.username === user.username || doc.username === user.email
+        (doc) => doc.username === user.username
       );
 
       setDocs(myDocs);
