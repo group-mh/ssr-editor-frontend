@@ -1,14 +1,7 @@
-/* const docModel = {
+const docModel = {
     baseUrl: window.location.href.includes("localhost")
         ? "http://localhost:1337"
-        : "",
-    baseName: window.location.href.includes("localhost")
-        ? "/"
-        : "/", */
-
-const docModel = {
-  baseUrl:
-    "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net",
+        : "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net",
   baseName: "/ssr-editor-frontend/",
 
   getAllDocs: async function getAllDocs() {

@@ -5,24 +5,25 @@ import "../../style/DocList.css";
 
 function MyDocList({ docs, setDocs }) {
   useEffect(() => {
-    async function fetchDocs() {
-      const allDocs = await docModel.getAllDocs();
+    async function fetchMyDocs() {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = localStorage.getItem("token");
 
-      const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !token) {
+          console.error("User, token missing.");
+          setDocs([]);
+          return;
+        }
 
-      if (!user) {
-        console.error("No user found.");
+        const myDocs = await docModel.getMyDocs();
+        setDocs(myDocs);
+      } catch (error) {
+        console.error("Faild when fetching users documents", error.message);
         setDocs([]);
-        return;
       }
-
-      const myDocs = allDocs.filter(
-        (doc) => doc.username === user.username
-      );
-
-      setDocs(myDocs);
     }
-    fetchDocs();
+    fetchMyDocs();
   }, [setDocs]);
 
   const docCards = docs.map((doc, index) => <DocCard key={index} doc={doc} />);

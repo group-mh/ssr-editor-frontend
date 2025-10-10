@@ -4,6 +4,11 @@ import DocCard from "./DocCard";
 import "../../style/DocList.css";
 
 function DocList({ docs, setDocs }) {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+        return <p className="notification">You must be logged in to see all documents.</p>
+    }
 
     async function fetchAllDocs() {
         const allDocs = await docModel.getAllDocs();
