@@ -42,16 +42,24 @@ function InviteForm({ docId }) {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+        <div>
+          <p className="info-text">
+            <strong>Test emails authorized with Mailgun:</strong><br />
+            hassan1998dev@gmail.com<br />
+            mats.jonstromer@gmail.com<br />
+            <em>Use one of these emails to test sending invites.</em>
+          </p>
+        </div>
         <div className="button-group">
           <button type="submit" className="create-btn">
             Send invite
           </button>
 
           <button type="button"
-          className="back-btn"
-          onClick={() => navigate(-1)}
+            className="back-btn"
+            onClick={() => navigate(-1)}
           >
-           Back
+            Back
           </button>
         </div>
         {inviteStatus && <p className="status-message">{inviteStatus}</p>}

@@ -17,17 +17,24 @@ const inviteModel = {
         method: "POST",
         body: JSON.stringify({ email, from }),
       });
-      
+
       const result = await response.json();
 
       if (!response.ok) {
+        if (response.status === 500) {
+          return {
+            success: false,
+            message:
+              "ERROR: Invite could not be sent. Mailgun sandbox accounts can only send to authorized recipients.",
+          };
+        }
         throw new Error(result.message || `Error: ${response.status}`);
       }
-   
+
       return { success: true, message: result.message || "Invite has been sent." };
     } catch (error) {
       console.error("sendInvite error:", error.message);
-      return { success: false, message: error.message || "Something went wrong."};
+      return { success: false, message: error.message || "Something went wrong." };
     }
   },
 };
