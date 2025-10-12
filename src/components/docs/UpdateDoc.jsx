@@ -37,7 +37,7 @@ function UpdateDoc() {
 
     async function saveText() {
         await docModel.updateDoc(newDoc);
-        navigate("/docs");
+        navigate("/my-docs");
     }
 
     return (
