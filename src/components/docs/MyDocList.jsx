@@ -24,9 +24,11 @@ function MyDocList({ docs, setDocs }) {
       }
     }
     fetchMyDocs();
-  }, [setDocs]);
+    // Set only data on component mounting to avoid multiple data fetcin on every operation i.e;Delete and reload-page
+    // }, [setDocs]);
+  }, []);
 
-  const docCards = docs.map((doc, index) => <DocCard key={index} doc={doc} showButtons={true}/>);
+  const docCards = docs.map((doc, index) => <DocCard key={index} doc={doc} showButtons={true} setDocs={setDocs} />);
 
   if (docCards.length > 0) {
     return <div className="list">{docCards}</div>;

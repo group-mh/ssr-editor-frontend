@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import docModel from "../../models/documents";
 import "../../style/DocCard.css";
 
-function DocCard({ doc, showButtons = true }) {
+function DocCard({ doc, showButtons = true, setDocs }) {
   const navigate = useNavigate();
 
   const editDoc = () => {
@@ -27,8 +27,15 @@ function DocCard({ doc, showButtons = true }) {
 
   const deleteDoc = async () => {
     if (window.confirm("Are you sure you want to delete the document?")) {
-      await docModel.deleteDoc(doc._id);
-      window.location.reload();
+      const result = await docModel.deleteDoc(doc._id);
+      if (result) {
+        console.log("Deleted successfully:", result);
+        // window.location.reload();
+        // Get updated docuemts list/State from parent component reloading trigger unnessary fetches.
+        setDocs(prevDocs => prevDocs.filter(d => d._id !== doc._id));
+      } else {
+        alert("Failed to delete document. See console for details.");
+      }
     }
   };
 
@@ -41,29 +48,29 @@ function DocCard({ doc, showButtons = true }) {
       </div>
       {showButtons && (
         <div className="button-group">
-        <button className="edit-btn" onClick={editDoc}>
-          Edit
-        </button>
-        <button className="delete-btn" onClick={deleteDoc}>
-          Delete
-        </button>
-        <button className="invite-btn" onClick={inviteDoc}>
-          Invite
-        </button>
-      </div>
+          <button className="edit-btn" onClick={editDoc}>
+            Edit
+          </button>
+          <button className="delete-btn" onClick={deleteDoc}>
+            Delete
+          </button>
+          <button className="invite-btn" onClick={inviteDoc}>
+            Invite
+          </button>
+        </div>
       )}
     </div>
   );
 }
 
 function dateFormatted(docDate) {
-    const date = new Date(docDate)
-    const month = ("0" + (date.getMonth() + 1)).slice(-2);
-    const day  = ("0" + (date.getDate())).slice(-2);
-    const year = date.getFullYear();
-    const hour =  ("0" + (date.getHours())).slice(-2);
-    const min =  ("0" + (date.getMinutes())).slice(-2);
-    return year + "-" + month + "-" + day + " " + hour + ":" +  min;
+  const date = new Date(docDate)
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + (date.getDate())).slice(-2);
+  const year = date.getFullYear();
+  const hour = ("0" + (date.getHours())).slice(-2);
+  const min = ("0" + (date.getMinutes())).slice(-2);
+  return year + "-" + month + "-" + day + " " + hour + ":" + min;
 }
 
 export default DocCard;
