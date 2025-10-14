@@ -4,7 +4,6 @@
 
 .card {
   width: 100%;
-  min-width: 300px;
   max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
@@ -35,14 +34,6 @@
 
 .edit-btn:hover {
   background-color: #007bffd1;
-}
-
-.invite-btn {
-  background-color: #ffea00;
-}
-
-.invite-btn:hover {
-  background-color:  #ffea00cd;
 }
 
 .back-btn {
