@@ -4,8 +4,6 @@ import docModel from "../../models/documents";
 import "../../style/CreateEditor.css";
 import { io } from "socket.io-client";
 
-const SERVER_URL = "http://localhost:1337";
-
 function UpdateDoc() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -20,11 +18,14 @@ function UpdateDoc() {
     });
     
     useEffect(() => {
-      socket.current = io(SERVER_URL);
+      console.log("Socket connected to:", docModel.baseUrl);
+      socket.current = io(docModel.baseUrl);
 
-      socket.current.emit("joinDoc", docId);
+      socket.current.emit("join_document", docId);
+      
+      console.log("Joining room:", docId);
 
-      socket.current.on("docUpdate", (data) => {
+      socket.current.on("document:update", (data) => {
         setNewDoc(data);
       });
 
@@ -38,14 +39,22 @@ function UpdateDoc() {
       const value = event.target.value;
       const updatedDoc = { ...newDoc, title: value };
       setNewDoc(updatedDoc);
-      socket.current.emit("updateDoc", updatedDoc)
+
+      socket.current.emit("document:update", {
+        docId: newDoc._id,
+        ...updatedDoc
+      });
     }
     
     function handleContentChange(event){
       const value = event.target.value;
       const updatedDoc = { ...newDoc, content: value };
       setNewDoc(updatedDoc);
-      socket.current.emit("updateDoc", updatedDoc)
+
+      socket.current.emit("document:update", {
+        docId: newDoc._id,
+        ...updatedDoc
+      });
     }
 
     const deleteDoc = async () => {
