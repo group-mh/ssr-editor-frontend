@@ -26,18 +26,9 @@ function UpdateDoc() {
       }
     };
 
-    const inviteDoc = () => {
-    navigate(`/invite/${newDoc._id}`, {
-      replace: true,
-      state: {
-        doc: newDoc,
-      },
-    });
-  }
-
     async function saveText() {
         await docModel.updateDoc(newDoc);
-        navigate("/my-docs");
+        navigate("/docs");
     }
 
     return (
@@ -82,14 +73,6 @@ function UpdateDoc() {
             onClick={deleteDoc}
           >
             Delete
-          </button>
-
-          <button
-            type="button"
-            className="invite-btn"
-            onClick={inviteDoc}
-          >
-            Invite
           </button>
         </div>
       </form>

@@ -54,7 +54,6 @@
   }
 
   .button-group {
-    max-width: 100%;
     display: flex;
     gap: 14px;
     margin-top: 10px;

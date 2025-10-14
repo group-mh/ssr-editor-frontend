@@ -24,14 +24,9 @@ function CreateEditor() {
       alert("Enter title and text!");
       return;
     }
-    const user = JSON.parse(localStorage.getItem("user"))
-    const docAuthor = {
-      ...newDoc,
-      author: [user?.username],
-    };
 
-    const response = await docModel.createDoc(docAuthor);
-    navigate("/my-docs");
+    const response = await docModel.createDoc(newDoc);
+    navigate("/docs");
   }
 
   return (
