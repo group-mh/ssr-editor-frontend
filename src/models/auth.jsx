@@ -1,7 +1,7 @@
 const auth = {
   baseUrl: "http://localhost:1337",
   token: "",
-
+  //  logic function
   login: async function (user) {
     try {
       const response = await fetch(`${this.baseUrl}/login`, {
