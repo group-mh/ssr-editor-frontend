@@ -1,37 +1,73 @@
 import { useEffect } from "react";
 import docModel from "../../models/documents";
-import DocCard from "./DocCard";
+import { useNavigate } from "react-router-dom";
 import "../../style/DocList.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileLines} from "@fortawesome/free-regular-svg-icons";
+
 
 function DocList({ docs, setDocs }) {
-    const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
-    // Jag kommentar bort så alla kan see dokument som finns i databasen. KAn används för att ha vy där man ka bara see document en dokument via kanse get_documentbyid.
-    // if (!user) {
-    //     return <p className="notification">You must be logged in to see all documents.</p>
-    // }
+  async function fetchAllDocs() {
+    const allDocs = await docModel.getAllDocs();
 
-    async function fetchAllDocs() {
-        const allDocs = await docModel.getAllDocs();
+    const sortedDocs = allDocs.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+    // setDocs(allDocs);
+    setDocs(sortedDocs);
+  }
 
-        const sortedDocs = allDocs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        // setDocs(allDocs);
-        setDocs(sortedDocs);
-    }
+  useEffect(() => {
+    fetchAllDocs();
+  }, []);
 
-    useEffect(() => {
-        fetchAllDocs();
-    }, []);
+  function dateFormatted(docDate) {
+    const date = new Date(docDate);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    const year = date.getFullYear();
+    const hour = ("0" + date.getHours()).slice(-2);
+    const min = ("0" + date.getMinutes()).slice(-2);
+    return year + "-" + month + "-" + day + " " + hour + ":" + min;
+  }
 
-    const docCards = docs.map((doc, index) => (
-        <DocCard key={index} doc={doc} showButtons={false} />
-    ));
+  return (
+    <main className="all-docs">
+      <div className="docs-container">
+        <div className="docs-grid">
+          <div className="name-column">Name</div>
+          <div className="author-column">Author</div>
+          <div className="created-column">Created</div>
+        </div>
 
-    if (docCards.length > 0) {
-        return <div className="list">{docCards}</div>;
-    } else {
-        return <p className="notification">No documents in the database</p>;
-    }
+        {!docs || docs.length === 0 ? (
+          <div className="docs-empty">No documents in the database.</div>
+        ) : (
+          docs.map((doc) => {
+
+            const title = doc.title;
+            const author = doc.author.join(", ");
+            const doc_date = dateFormatted(doc.created_at);
+
+            return (
+              <div className="doc-row" key={doc._id}>
+                <div className="name-column">
+                  <span className="name-doc" title={title}>
+                    <FontAwesomeIcon icon={faFileLines} className="doc-icon" />
+                    <span>{title}</span>
+                  </span>
+                </div>
+                <div className="author-column" title={author}>{author}</div>
+                <div className="created-column">{doc_date}</div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </main>
+  );
 }
 
 export default DocList;
