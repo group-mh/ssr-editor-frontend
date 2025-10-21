@@ -1,9 +1,18 @@
 import { useEffect } from "react";
 import docModel from "../../models/documents";
-import DocCard from "./DocCard";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFileLines,
+  faUserPlus,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+
 import "../../style/DocList.css";
 
 function MyDocList({ docs, setDocs }) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchMyDocs() {
       try {
@@ -24,19 +33,107 @@ function MyDocList({ docs, setDocs }) {
       }
     }
     fetchMyDocs();
-    // Set only data on component mounting to avoid multiple data fetcin on every operation i.e;Delete and reload-page
-    // }, [setDocs]);
   }, []);
 
-  const docCards = docs.map((doc, index) => <DocCard key={index} doc={doc} showButtons={true} setDocs={setDocs} />);
-
-  if (docCards.length > 0) {
-    return <div className="list">{docCards}</div>;
-  } else {
-    return (
-      <p className="notification">You have no documents in the database</p>
-    );
+  function dateFormatted(docDate) {
+    const date = new Date(docDate);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    const year = date.getFullYear();
+    const hour = ("0" + date.getHours()).slice(-2);
+    const min = ("0" + date.getMinutes()).slice(-2);
+    return year + "-" + month + "-" + day + " " + hour + ":" + min;
   }
+
+  async function handleDelete(doc) {
+    if (confirm(`Are you sure you want to delete "${doc.title}"?`)) {
+      const result = await docModel.deleteDoc(doc._id);
+      if (result) {
+        console.log("Deleted successfully:", result);
+        setDocs((prevDocs) => prevDocs.filter((d) => d._id !== doc._id));
+      } else {
+        alert("Failed to delete document.");
+      }
+    }
+  }
+  
+  function handleUpdate(doc) {
+    navigate(`/update/${doc._id}`, {
+      state: {
+        doc: doc,
+      },
+    });
+  }
+
+  function handleInvite(docId) {
+    navigate(`/update/${docId}`);
+  }
+
+  return (
+    <main className="all-docs">
+      <div className="docs-container">
+        <div className="docs-grid">
+          <div className="name-column">Name</div>
+          <div className="author-column">Author</div>
+          <div className="created-column">Created</div>
+          <div className="actions-column"></div>
+        </div>
+
+        {!docs || docs.length === 0 ? (
+          <div className="docs-empty">No documents in the database.</div>
+        ) : (
+          docs.map((doc) => {
+            const title = doc.title;
+            const author = doc.author.join(", ");
+            const created = dateFormatted(doc.created_at);
+
+            return (
+              <div
+                className="my-doc-row"
+                key={doc._id}
+                onClick={() => {
+                  handleUpdate(doc);
+                }}
+              >
+                <div className="name-column">
+                  <span className="name-doc" title={title}>
+                    <FontAwesomeIcon icon={faFileLines} className="doc-icon" />
+                    <span>{title}</span>
+                  </span>
+                </div>
+                <div className="author-column" title={author}>
+                  {author}
+                </div>
+                <div className="created-column">{created}</div>
+                <div className="actions-column">
+                  <button
+                    className="icon-btn invite-btn"
+                    title="Invite"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleInvite(doc._id);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faUserPlus} />
+                  </button>
+                  <button
+                    className="icon-btn delete-btn"
+                    title="Delete"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(doc);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </main>
+  );
 }
 
 export default MyDocList;
