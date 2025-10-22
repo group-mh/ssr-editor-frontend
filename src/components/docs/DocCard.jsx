@@ -6,7 +6,7 @@ function DocCard({ doc, showButtons = true, setDocs }) {
   const navigate = useNavigate();
 
   const editDoc = () => {
-    navigate(`/edit/${doc._id}`, {
+    navigate(`/edit/${doc.id}`, {
       replace: true,
       state: {
         doc: doc,
@@ -17,7 +17,7 @@ function DocCard({ doc, showButtons = true, setDocs }) {
   const doc_date = doc.created_at ? dateFormatted(doc.created_at) : null;
 
   const inviteDoc = () => {
-    navigate(`/invite/${doc._id}`, {
+    navigate(`/invite/${doc.id}`, {
       replace: true,
       state: {
         doc: doc,
@@ -27,12 +27,12 @@ function DocCard({ doc, showButtons = true, setDocs }) {
 
   const deleteDoc = async () => {
     if (window.confirm("Are you sure you want to delete the document?")) {
-      const result = await docModel.deleteDoc(doc._id);
+      const result = await docModel.deleteDoc(doc.id);
       if (result) {
         console.log("Deleted successfully:", result);
         // window.location.reload();
         // Get updated docuemts list/State from parent component reloading trigger unnessary fetches.
-        setDocs(prevDocs => prevDocs.filter(d => d._id !== doc._id));
+        setDocs(prevDocs => prevDocs.filter(d => d.id !== doc.id));
       } else {
         alert("Failed to delete document. See console for details.");
       }
