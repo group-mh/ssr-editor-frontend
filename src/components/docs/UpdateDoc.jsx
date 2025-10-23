@@ -2,12 +2,20 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import docModel from "../../models/documents";
 import "../../style/CreateEditor.css";
+import "../../style/UpdateDoc.css";
 import { io } from "socket.io-client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faUserPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import ReactQuill from "react-quill";
+import "quill/dist/quill.snow.css";
 
 function UpdateDoc() {
+  console.log("UpdateDoc loaded");
     const location = useLocation();
     const navigate = useNavigate();
+
     const socket = useRef(null);
+    const isSocketUpdate = useRef(false)
 
     const docId = location.state.doc._id;
 
@@ -16,7 +24,28 @@ function UpdateDoc() {
         title: location.state.doc.title,
         content: location.state.doc.content || "",
     });
-    
+
+    const modules = {
+      toolbar: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'align': [] }],
+        ['link', 'image'],
+        ['clean']
+      ],
+    };
+
+    const formats = [
+      'header',
+      'bold', 'italic', 'underline', 'strike',
+      'color', 'background',
+      'list', 'bullet',
+      'align',
+      'link', 'image'
+    ];
+
     useEffect(() => {
       console.log("Socket connected to:", docModel.baseUrl);
       socket.current = io(docModel.baseUrl);
@@ -26,6 +55,7 @@ function UpdateDoc() {
       console.log("Joining room:", docId);
 
       socket.current.on("document:update", (data) => {
+        isSocketUpdate.current = true;
         setNewDoc(data);
       });
 
@@ -40,21 +70,32 @@ function UpdateDoc() {
       const updatedDoc = { ...newDoc, title: value };
       setNewDoc(updatedDoc);
 
-      socket.current.emit("document:update", {
+      if (socket.current) {
+        socket.current.emit("document:update", {
         docId: newDoc._id,
         ...updatedDoc
       });
+      }
+      
     }
     
-    function handleContentChange(event){
-      const value = event.target.value;
+    function handleContentChange(value){
+
+      if (isSocketUpdate.current) {
+        isSocketUpdate.current = false;
+        return;
+      }
+
       const updatedDoc = { ...newDoc, content: value };
       setNewDoc(updatedDoc);
 
-      socket.current.emit("document:update", {
-        docId: newDoc._id,
-        ...updatedDoc
-      });
+      if (socket.current) {
+        socket.current.emit("document:update", {
+          docId: newDoc._id,
+          ...updatedDoc
+        });
+      }
+      
     }
 
     const deleteDoc = async () => {
@@ -73,67 +114,52 @@ function UpdateDoc() {
     });
   }
 
+    const goBack = async () => {
+      await docModel.updateDoc(newDoc);
+      navigate("/my-docs");
+    };
+
     async function saveText() {
         await docModel.updateDoc(newDoc);
         navigate("/my-docs");
     }
 
     return (
-       <div className="editor-container">
-      <form className="editor-form" onSubmit={(e) => e.preventDefault()}>
-        {" "}
-        <label htmlFor="title">Title</label>
-        <input
-          id="title"
-          name="title"
-          className="input-field"
-          value={newDoc.title}
-          onChange={handleTitleChange}
-          required
-        />
-        <label htmlFor="content">Text</label>
-        <textarea
-          id="content"
-          name="content"
-          className="text-area"
-          value={newDoc.content}
-          onChange={handleContentChange}
-          rows="10"
-          required
-        />
-        <div className="button-group">
-          <button className="create-btn" onClick={saveText}>
-                Save
+      <>
+        <div className="toolbar">
+          <button className="back-button" onClick={goBack} aria-label="Back">
+            <FontAwesomeIcon icon={faArrowLeft} />
           </button>
 
-          <button
-            type="button"
-            className="back-btn"
-            onClick={() => navigate("/docs")}
-          >
-            Back
+          <input
+            type="text"
+            id="doc-title"
+            value={newDoc.title}
+            onChange={handleTitleChange}
+            placeholder="Untitled Document"
+          />
+
+          <button className="invite-button" onClick={inviteDoc} aria-label="Invite">
+            <FontAwesomeIcon icon={faUserPlus} />
           </button>
 
-          <button
-            type="button"
-            className="delete-btn"
-            onClick={deleteDoc}
-          >
-            Delete
-          </button>
-
-          <button
-            type="button"
-            className="invite-btn"
-            onClick={inviteDoc}
-          >
-            Invite
+          <button className="delete-button" onClick={deleteDoc} aria-label="Delete">
+            <FontAwesomeIcon icon={faTrash} />
           </button>
         </div>
-      </form>
-    </div>
 
+        <div className="editor-container">
+          <ReactQuill 
+            className='quill-editor'
+            theme="snow"
+            value={newDoc.content}
+            onChange={handleContentChange}
+            modules={modules}
+            formats={formats}        
+          />
 
+        </div>
+        </>
     );
 }
 

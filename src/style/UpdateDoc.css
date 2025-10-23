@@ -1,0 +1,102 @@
+.toolbar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    /* justify-content: center; */
+    align-items: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px;
+    z-index: 999;
+}
+
+.back-button,
+.delete-button,
+.invite-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    color: #333;
+    font-size: 20px;
+    transition: color 0.2s ease;
+}
+
+.back-button:hover,
+.invite-button:hover {
+    color: #007bff;
+}
+
+.delete-button:hover {
+    color:  #d9534f;;
+}
+
+#doc-title {
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    padding: 5px 10px;
+    width: 200px;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.editor-container .quill-editor {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 1rem;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
+    background-color: white;
+}
+
+.editor-container .ql-container.ql-snow {
+    border: none;
+    display: flex;
+}
+
+.editor-container .ql-toolbar.ql-snow{
+    position: sticky;
+    top: 110px;
+    z-index: 100;
+    justify-content: center;
+    margin-top: 0.1em;
+}
+
+.ql-editor {
+    margin-top: 15px;
+}
+
+body {
+    background-color: #F3F3F3;
+    margin: 0;
+}
+
+@media print {
+    body {
+        background: none;
+    }
+
+    .editor-container .ql-editor {
+        width: 6.5in;
+        min-height: 9in;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+        align-self: flex-start;
+    }
+
+    .editor-container .ql-toolbar {
+        display: none;
+    }
+}
+
