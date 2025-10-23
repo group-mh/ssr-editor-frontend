@@ -6,13 +6,12 @@
   }
   
   .editor-container {
-    flex: 2;
-    min-width: 500px;
-    padding: 30px;
+    width: 100%;
+    min-width: 700px;
+    margin: 40px auto;
+    padding-top: 30px;
     background-color: #fafafa;
     border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-    position: relative;
   }
 
   .editor-form {
