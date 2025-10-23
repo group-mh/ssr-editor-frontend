@@ -64,7 +64,12 @@ function DocCard({ doc, showButtons = true, setDocs }) {
 }
 
 function dateFormatted(docDate) {
-  const date = new Date(docDate)
+  // const date = new Date(docDate);
+  if (!docDate) return "";
+  const timestamp = Number(docDate); // convert string to number
+  const date = new Date(timestamp);
+  // const date = new Date(docDate);
+
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
   const day = ("0" + (date.getDate())).slice(-2);
   const year = date.getFullYear();

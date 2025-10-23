@@ -22,12 +22,10 @@ const docModel = {
       }
     `;
     try {
-      // const response = await fetch(`${docModel.baseUrl}/docs`, {
       const response = await fetch(`${docModel.baseUrl}/graphql`, {
         headers: {
           "content-type": "application/json",
         },
-        // method: "GET",
         method: "POST",
         body: JSON.stringify({ query }),
       });
@@ -37,7 +35,6 @@ const docModel = {
       }
 
       const result = await response.json();
-      // return result.data ;
       return result.data.documents;
     } catch (error) {
       console.error("getAllDocs error:", error.message);
@@ -46,14 +43,31 @@ const docModel = {
   },
 
   getMyDocs: async function getMyDocs() {
+    const query = `
+        query {
+          myDocuments {
+            id
+            title
+            content
+            author
+            created_at
+            comments {
+              id
+              user
+              text
+            }
+          }
+        }
+      `;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${docModel.baseUrl}/my-docs`, {
+      const response = await fetch(`${docModel.baseUrl}/graphql`, {
         headers: {
           "content-type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        method: "GET",
+        method: "POST",
+        body: JSON.stringify({ query }),
       });
 
       if (!response.ok) {
@@ -61,7 +75,8 @@ const docModel = {
       }
 
       const result = await response.json();
-      return result.data;
+      console.log("GraphQL myDocs result:", result.data);
+      return result.data.myDocuments;
     } catch (error) {
       console.error("getAllDocs error:", error.message);
       return [];
@@ -71,9 +86,28 @@ const docModel = {
   createDoc: async function createDoc(newDoc) {
     try {
       const token = localStorage.getItem("token");
+      const mutation = `
+          mutation {
+            addDocument(
+              title: "${newDoc.title}",
+              content: "${newDoc.content}"
+            ) {
+              id
+              title
+              content
+              author
+              created_at
+              comments {
+                id
+                user
+                text
+              }
+            }
+          }
+        `;
 
-      const response = await fetch(`${docModel.baseUrl}/docs`, {
-        body: JSON.stringify(newDoc),
+      const response = await fetch(`${docModel.baseUrl}/graphql`, {
+        body: JSON.stringify({ query: mutation }),
         headers: {
           "content-type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -87,7 +121,7 @@ const docModel = {
 
       const result = await response.json();
       console.log("createDoc response result:", result);
-      return result;
+      return result.data.addDocument;
     } catch (error) {
       console.error("createDoc error:", error.message);
       return null;
@@ -97,7 +131,6 @@ const docModel = {
   updateDoc: async function updateDoc(updateDoc) {
     try {
       const token = localStorage.getItem("token");
-      // const { _id, ...updateData } = updateDoc;
       const { id, title, content, comments } = updateDoc;
       const mutation = `
       mutation {
@@ -119,15 +152,11 @@ const docModel = {
         }
       }
     `;
-
-      // const response = await fetch(`${docModel.baseUrl}/docs/${_id}`, {
       const response = await fetch(`${docModel.baseUrl}/graphql`, {
-        // body: JSON.stringify(updateData),
         headers: {
           "content-type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        // method: "PUT",
         method: "POST",
         body: JSON.stringify({ query: mutation }),
       });
@@ -138,7 +167,6 @@ const docModel = {
 
       const result = await response.json();
       console.log("updateDoc response:", result);
-      // return result;
       return result.data.updateDocument;
     } catch (error) {
       console.error("updateDoc error:", error.message);
@@ -150,12 +178,19 @@ const docModel = {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(`${docModel.baseUrl}/docs/${id}`, {
-        method: "DELETE",
+      const mutation = `
+          mutation {
+            deleteDocument(id: "${id}")
+          }
+        `;
+
+      const response = await fetch(`${docModel.baseUrl}/graphql`, {
         headers: {
           "content-type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        method: "POST",
+        body: JSON.stringify({ query: mutation }),
       });
 
       if (!response.ok) {
@@ -163,7 +198,7 @@ const docModel = {
       }
 
       const result = await response.json();
-      return result;
+      return result.data.deleteDocument;
     } catch (error) {
       console.error("deleteDoc error:", error.message);
       return null;
