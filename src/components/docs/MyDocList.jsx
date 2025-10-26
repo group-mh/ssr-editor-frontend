@@ -58,22 +58,23 @@ function MyDocList({ docs, setDocs }) {
   }
   
   function handleUpdate(doc) {
-    navigate(`/update/${doc._id}`, {
+    navigate(`/edit/${doc._id}`, {
       state: {
         doc: doc,
       },
     });
   }
 
+  
   function handleInvite(docId) {
-    navigate(`/update/${docId}`);
+    navigate(`/invite/${docId}`);
   }
 
   return (
     <main className="all-docs">
       <div className="docs-container">
         <div className="docs-grid">
-          <div className="name-column">Name</div>
+          <div className="title-column">Title</div>
           <div className="author-column">Author</div>
           <div className="created-column">Created</div>
           <div className="actions-column"></div>
@@ -92,11 +93,12 @@ function MyDocList({ docs, setDocs }) {
                 className="my-doc-row"
                 key={doc._id}
                 onClick={() => {
+                  console.log("Row clicked: ", doc._id);
                   handleUpdate(doc);
                 }}
               >
-                <div className="name-column">
-                  <span className="name-doc" title={title}>
+                <div className="title-column">
+                  <span className="title-doc" title={title}>
                     <FontAwesomeIcon icon={faFileLines} className="doc-icon" />
                     <span>{title}</span>
                   </span>
