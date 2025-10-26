@@ -1,13 +1,17 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import "../../style/Header.css";
+import "../../style/CreateEditor.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileLines,
+  faFolderOpen,
+  faUser,
   faPlus,
-  faFloppyDisk,
   faUserCircle,
-  faUserPlus,
+  
 } from "@fortawesome/free-solid-svg-icons";
+import CreateEditor from "../docs/CreateEditor";
 
 function Header({ user, token, onLogout }) {
   const navigate = useNavigate();
@@ -29,7 +33,7 @@ function Header({ user, token, onLogout }) {
               className={`doc-menu-btn ${isActive("/docs") ? "active" : ""}`}
               onClick={() => navigate("/")}
             >
-              <FontAwesomeIcon icon={faFileLines} />
+              <FontAwesomeIcon icon={faFolderOpen} />
               All Docs
             </button>
 
@@ -38,7 +42,7 @@ function Header({ user, token, onLogout }) {
                 className={`doc-menu-btn ${isActive("/my-docs") ? "active" : ""}`}
                 onClick={() => navigate("/my-docs")}
               >
-                <FontAwesomeIcon icon={faFileLines} />
+                <FontAwesomeIcon icon={faUser} />
                 My Docs
               </button>
             )}
