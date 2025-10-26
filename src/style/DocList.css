@@ -8,6 +8,7 @@
 .docs-container {
   width: 100%;
   max-width: 1000px;
+  min-width: 1000px;
   margin: 40px auto;
   background: #fff;
   border: 1px solid #e6e6e6;
@@ -18,7 +19,8 @@
 
 .docs-grid {
   display: grid;
-  grid-template-columns: 2fr 2fr 1.2fr 0.2fr;
+  /* grid-template-columns: 2fr 2fr 1.2fr 0.2fr; */
+  grid-template-columns: 2fr 2fr 1.2fr 100px;
   align-items: center;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
@@ -29,51 +31,133 @@
   letter-spacing: 0.4px
 }
 
-.doc-row {
+.doc-row,
+.my-doc-row {
   display: grid;
-  grid-template-columns: 2fr 2fr 1.2fr 0.2fr;
+  grid-template-columns: 2fr 2fr 1.2fr 100px;
   padding: 10px 12px;
   border-top: 1px solid #f2f2f2;
   transition: background-color 0.2s ease;
+  align-items: center;
+  line-height: 20px;
+  min-width: 0;
 }
 
-.doc-row:hover {
+.my-doc-row {
+  cursor: pointer;
+}
+
+.doc-row:hover,
+.my-doc-row:hover {
   background-color: #f8faff;
 }
+
+
+
+
 
 .doc-icon {
   color: #007bff;
 }
 
-.name-doc {
-  display: flex;
+.title-doc {
+  display: inline-flex;
   flex: 1;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   color: #222;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
 }
 
-.name-doc i {
+
+
+.title-doc i {
   color: #007bff;
 }
 
-.name-column,
+.title-doc .doc-icon {
+  flex-shrink: 0;
+}
+
+.title-doc span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title-column,
 .author-column {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 300px;
+  min-width: 0;
+  display: block;
 }
 
-.name-column,
+.title-column,
 .author-column,
 .created-column {
   font-size: 14px;
   color: #444;
+}
+
+.title-column {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.actions-column {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 45px;
+  padding-right: 20px;
+  height: 100%;
+}
+
+
+
+/* .author-column,
+.created-column {
+  padding-left: 0;
+  padding-right: 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+} */
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2 ease, transform 0.1 ease;
+  border-radius: 4px;
+}
+
+.icon-btn:hover {
+  color: #007bff;
+  background-color: #f0f4ff;
+  transform: scale(1.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.delete-btn:hover {
+  color: #d9534f;
+  background-color: #ffeaea;
 }
 
 

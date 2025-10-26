@@ -35,7 +35,7 @@ function DocList({ docs, setDocs }) {
     <main className="all-docs">
       <div className="docs-container">
         <div className="docs-grid">
-          <div className="name-column">Name</div>
+          <div className="title-column">Title</div>
           <div className="author-column">Author</div>
           <div className="created-column">Created</div>
         </div>
@@ -51,8 +51,8 @@ function DocList({ docs, setDocs }) {
 
             return (
               <div className="doc-row" key={doc._id}>
-                <div className="name-column">
-                  <span className="name-doc" title={title}>
+                <div className="title-column">
+                  <span className="title-doc" title={title}>
                     <FontAwesomeIcon icon={faFileLines} className="doc-icon" />
                     <span>{title}</span>
                   </span>
