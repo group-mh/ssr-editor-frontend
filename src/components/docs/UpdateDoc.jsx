@@ -129,8 +129,14 @@ function UpdateDoc() {
 
     return (
       <>
-        <div className="toolbar">
-          <button className="back-button" onClick={goBack} aria-label="Back">
+        <div className="create-toolbar">
+          <div className="toolbar-actions2">
+          <button 
+            className="back-button"
+            onClick={goBack}
+            title="Back"
+            aria-label="Back"
+          >
             <FontAwesomeIcon icon={faArrowLeft} />
           </button>
 
@@ -139,28 +145,40 @@ function UpdateDoc() {
             id="doc-title"
             value={newDoc.title}
             onChange={handleTitleChange}
-            placeholder="Untitled Document"
+            placeholder="Enter a title"
+            aria-label="Title"
+            title="Title"
           />
 
-          <button className="invite-button" onClick={inviteDoc} aria-label="Invite">
+          <button
+            className="invite-button"
+            onClick={inviteDoc}
+            aria-label="Invite"
+            title="Invite"
+          >
             <FontAwesomeIcon icon={faUserPlus} />
           </button>
 
-          <button className="delete-button" onClick={deleteDoc} aria-label="Delete">
+          <button
+            className="delete-button"
+            onClick={deleteDoc} 
+            aria-label="Delete"
+            title="Delete"
+          >
             <FontAwesomeIcon icon={faTrash} />
           </button>
+          </div>
         </div>
 
-        <div className="editor-container">
+        <div className="update-editor-container">
           <ReactQuill 
-            className='quill-editor'
+            className='update-quill-editor'
             theme="snow"
             value={newDoc.content}
             onChange={handleContentChange}
             modules={modules}
-            formats={formats}        
+            formats={formats}
           />
-
         </div>
         </>
     );
