@@ -7,16 +7,19 @@
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     display: flex;
-    /* justify-content: center; */
+    justify-content: center;
     align-items: flex;
     align-items: center;
-    gap: 10px;
+    gap: 25px;
     padding: 0 20px;
     z-index: 999;
 }
 
+
 .back-button,
 .delete-button,
+.save-button,
+.cancel-button,
 .invite-button {
     background: none;
     border: none;
@@ -30,11 +33,13 @@
 }
 
 .back-button:hover,
-.invite-button:hover {
+.invite-button:hover,
+.save-button:hover {
     color: #007bff;
 }
 
-.delete-button:hover {
+.delete-button:hover,
+.cancel-button:hover {
     color:  #d9534f;;
 }
 
@@ -51,30 +56,59 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.editor-container .quill-editor {
-    width: 8.5in;
-    min-height: 11in;
-    margin: 1rem;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
-    background-color: white;
-}
-
-.editor-container .ql-container.ql-snow {
-    border: none;
+  .update-editor-container {
+    margin-top: 280px;
     display: flex;
-}
+    flex-direction: column;
+    align-items: center;
+  }
 
-.editor-container .ql-toolbar.ql-snow{
-    position: sticky;
-    top: 110px;
-    z-index: 100;
-    justify-content: center;
-    margin-top: 0.1em;
-}
+  .update-editor-container .update-quill-editor {
+      width: 8.5in;
+      min-height: 11in;
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, .1);
+      background-color: white;
+  }
 
-.ql-editor {
-    margin-top: 15px;
-}
+ 
+  .update-editor-container .ql-toolbar.ql-snow {
+      position: fixed;
+      top: 115px;
+      left: 200px;
+      right: 200px;
+      z-index: 1001;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 5px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      border-radius: 25px;
+      background-color: #f0f4f9;
+  }
+
+  .update-editor-container .ql-container.ql-snow {
+    border: none;
+    margin-top: 10px;
+  }
+
+  .update-editor-container {
+    
+    position: relative;
+    margin-top: 180px;
+  }
+  
+  .update-editor-container .ql-editor {
+    min-height: 11in;
+  }
+
+ .toolbar-actions2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      padding-top: 50px;
+      z-index: 1002;
+  }
 
 body {
     background-color: #F3F3F3;
