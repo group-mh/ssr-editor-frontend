@@ -1,21 +1,19 @@
 import { useEffect } from "react";
 import docModel from "../../models/documents";
-import { useNavigate } from "react-router-dom";
 import "../../style/DocList.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines} from "@fortawesome/free-regular-svg-icons";
 
 
 function DocList({ docs, setDocs }) {
-  const navigate = useNavigate();
-
+  
   async function fetchAllDocs() {
     const allDocs = await docModel.getAllDocs();
 
     const sortedDocs = allDocs.sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     );
-    // setDocs(allDocs);
+    
     setDocs(sortedDocs);
   }
 
@@ -49,7 +47,7 @@ function DocList({ docs, setDocs }) {
 
             const title = doc.title;
             const author = doc.author.join(", ");
-            const doc_date = dateFormatted(doc.created_at);
+            const created = dateFormatted(doc.created_at);
 
             return (
               <div className="doc-row" key={doc._id}>
@@ -60,7 +58,7 @@ function DocList({ docs, setDocs }) {
                   </span>
                 </div>
                 <div className="author-column" title={author}>{author}</div>
-                <div className="created-column">{doc_date}</div>
+                <div className="created-column">{created}</div>
               </div>
             );
           })
