@@ -93,9 +93,9 @@ function CreateEditor() {
   return (
    <>
    <div className="create-toolbar">
-         <h2>Create a New Document</h2>
+         <h2>Create New Document</h2>
          <p className="toolbar-description">
-          Enter title and text,<br/> then click on the save icon to create the document.
+          Enter title and text, click save icon to create the document.
         </p>
         <div className="toolbar-actions">
           <button
