@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import "../../style/Login.css";
 import auth from "../../models/auth";
 
 export default function Login( { setToken, setUser}) {
@@ -70,7 +71,8 @@ export default function Login( { setToken, setUser}) {
 };
 
 return (
-  <form onSubmit={handleSubmit}>
+  <div className="login-register-page">
+  <form className="login-register-form" onSubmit={handleSubmit}>
     <h2>{mode === "login" ? "Login" : "Register"}</h2>
 
     {mode === "register" && (
@@ -101,9 +103,9 @@ return (
 
         <button type="submit">{mode === "login" ? "Login" : "Register"}</button>
 
-        {status && <p>{status}</p>}
+        {status && <p className="status">{status}</p>}
 
-        <p>
+        <p className="switch-mode">
           {mode === "login" ? (
             <>
               Don't have an account?{" "}
@@ -134,6 +136,7 @@ return (
           )}
         </p>
   </form>
+  </div>
 )
 
 
