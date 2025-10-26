@@ -1,7 +1,7 @@
 import { useState } from "react";
-import "../../style/CreateEditor.css";
+import "../../style/Invite.css";
 import inviteModel from "../../models/invite";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function InviteForm({ docId }) {
   const { id } = useParams();
@@ -29,9 +29,12 @@ function InviteForm({ docId }) {
   }
 
   return (
-    <div className="editor-container">
-      <form className="editor-form" onSubmit={handleSubmit}>
-        <label htmlFor="email">Invite by email</label>
+    <div className="invite-page">
+      <form className="invite-form" onSubmit={handleSubmit}>
+        <h2>Invite a Collaborator</h2>
+        <p className="invite-description">
+          Enter email of the person you want to invite to this document.
+        </p>
         <input
           type="email"
           id="email"
@@ -42,7 +45,7 @@ function InviteForm({ docId }) {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <div>
+        <div className="info-box">
           <p className="info-text">
             <strong>Test emails authorized with Mailgun:</strong><br />
             hassan1998dev@gmail.com<br />
@@ -50,8 +53,9 @@ function InviteForm({ docId }) {
             <em>Use one of these emails to test sending invites.</em>
           </p>
         </div>
+
         <div className="button-group">
-          <button type="submit" className="create-btn">
+          <button type="submit" className="invite-btn">
             Send invite
           </button>
 
@@ -62,7 +66,19 @@ function InviteForm({ docId }) {
             Back
           </button>
         </div>
-        {inviteStatus && <p className="status-message">{inviteStatus}</p>}
+
+
+        {inviteStatus && (
+        <p 
+          className={`invite-status ${
+            inviteStatus.toLowerCase().includes("error") 
+              ? "error" 
+              : "success" 
+          }`}
+          >
+          {inviteStatus}
+          </p>
+        )}
       </form>
     </div>
   );
