@@ -16,11 +16,12 @@
       align-items: center;
       flex-direction: column;
       padding: 15px 10px;
+      padding-bottom: 70px;
       z-index: 999;
   }
 
   .create-toolbar h2 {
-    margin-top: 3.5rem;
+    margin: 3.5rem 0 5px 0;
     font-size: 1.6rem;
     font-weight: 600;
     color: #222;
@@ -32,6 +33,7 @@
     color: #555;
     text-align: center;
     max-width: 600px;
+    font-style: italic;
   }
 
   .toolbar-actions {
@@ -86,37 +88,56 @@
       color: #333;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
+  
+  .create-editor-container {
+    margin-top: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   .create-editor-container .create-quill-editor {
       width: 8.5in;
       min-height: 11in;
-      box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, .1);
       background-color: white;
+      margin-top: 20px;
+  }
+
+ 
+  .create-editor-container .ql-toolbar.ql-snow {
+      position: fixed;
+      top: 200px;
+      left: 200px;
+      right: 200px;
+      z-index: 1001;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 5px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      border-radius: 25px;
+      background-color: #f0f4f9;
   }
 
   .create-editor-container .ql-container.ql-snow {
-      border: none;
-      display: block;
-  }
-
-  .create-editor-container .ql-toolbar.ql-snow{
-      position: sticky;
-      top: 240px;
-      z-index: 100;
-      display: flex;
-      justify-content: center;
-      background-color: #fff;
+    border: none;
+    margin-top: 10px;
   }
 
   .create-editor-container {
     
     position: relative;
-    margin-top: 10px;
+    margin-top: 240px;
   }
   
   .create-editor-container .ql-editor {
-    margin-top: 40px;
+    min-height: 11in;
   }
+
+.ql-editor.ql-blank::before {
+    color: rgb(31, 31, 31);
+}
 
 
   body {
