@@ -3,7 +3,7 @@ import "../../style/Footer.css";
 function Footer() {
     return (
         <footer className="footer">
-            <p>&copy; Grupp M & H {new Date().getFullYear()} SSR Editor</p>
+            <p>&copy; Grupp M & H {new Date().getFullYear()}</p>
         </footer>
     );
 }
