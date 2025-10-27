@@ -17,7 +17,7 @@ function UpdateDoc() {
     const socket = useRef(null);
     const isSocketUpdate = useRef(false)
 
-    const docId = location.state.doc._id;
+  const docId = location.state.doc.id;
 
     const [newDoc, setNewDoc] = useState({
         _id: docId,
@@ -50,25 +50,24 @@ function UpdateDoc() {
       console.log("Socket connected to:", docModel.baseUrl);
       socket.current = io(docModel.baseUrl);
 
-      socket.current.emit("join_document", docId);
-      
-      console.log("Joining room:", docId);
+    socket.current.emit("join_document", docId);
+    console.log("Joining room:", docId);
 
       socket.current.on("document:update", (data) => {
         isSocketUpdate.current = true;
         setNewDoc(data);
       });
 
-      return () => {
-        socket.current.disconnect();
-      }
-    }, [docId]);
-   
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [docId]);
 
-    function handleTitleChange(event){
-      const value = event.target.value;
-      const updatedDoc = { ...newDoc, title: value };
-      setNewDoc(updatedDoc);
+  
+  function handleTitleChange(event) {
+    const value = event.target.value;
+    const updatedDoc = { ...newDoc, title: value };
+    setNewDoc(updatedDoc);
 
       if (socket.current) {
         socket.current.emit("document:update", {
@@ -98,15 +97,15 @@ function UpdateDoc() {
       
     }
 
-    const deleteDoc = async () => {
-      if (window.confirm("Are you sure you want to delete the document?")) {
-        await docModel.deleteDoc(newDoc._id);
-        navigate("/my-docs")
-      }
-    };
+  const deleteDoc = async () => {
+    if (window.confirm("Are you sure you want to delete the document?")) {
+      await docModel.deleteDoc(newDoc.id);
+      navigate("/my-docs");
+    }
+  };
 
-    const inviteDoc = () => {
-    navigate(`/invite/${newDoc._id}`, {
+  const inviteDoc = () => {
+    navigate(`/invite/${newDoc.id}`, {
       replace: true,
       state: {
         doc: newDoc,
@@ -119,10 +118,14 @@ function UpdateDoc() {
       navigate("/my-docs");
     };
 
-    async function saveText() {
-        await docModel.updateDoc(newDoc);
-        navigate("/my-docs");
-    }
+  async function saveText() {
+    const docToSave = {
+      ...newDoc,
+      comments: comments
+    };
+    await docModel.updateDoc(docToSave);
+    navigate("/my-docs");
+  }
 
     return (
       <>
