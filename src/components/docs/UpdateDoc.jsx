@@ -29,14 +29,7 @@ function UpdateDoc() {
     comments: location.state.doc.comments || [],
   });
 
-  const [comments, setComments] = useState(location.state.doc.comments || []);
-  const [showCommentBox, setShowCommentBox] = useState(false);
-  const [commentText, setCommentText] = useState("");
-  const [selectedText, setSelectedText] = useState("");
-  const [commentBoxPosition, setCommentBoxPosition] = useState({
-    top: 0,
-    left: 0,
-  });
+  const docId = location.state.doc.id;
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const currentUser = user?.username || "Anonymous";
@@ -84,98 +77,37 @@ function UpdateDoc() {
     };
   }, [docId]);
 
-  useEffect(() => {
-    if (!quillRef.current) return;
+    const formats = [
+      'header',
+      'bold', 'italic', 'underline', 'strike',
+      'color', 'background',
+      'list', 'bullet',
+      'align',
+      'link', 'image'
+    ];
 
-    const quill = quillRef.current.getEditor();
+    useEffect(() => {
+      console.log("Socket connected to:", docModel.baseUrl);
+      socket.current = io(docModel.baseUrl);
 
-    const handleSelectionChange = (range, oldRange, source) => {
-      if (range && range.length > 0 && source === "user") {
-        const text = quill.getText(range.index, range.length).trim();
+    socket.current.emit("join_document", docId);
+    console.log("Joining room:", docId);
 
-        if (text.length > 0) {
-          setSelectedText(text);
-
-          const bounds = quill.getBounds(range.index, range.length);
-          const editorRect = quill.root.getBoundingClientRect();
-
-          setCommentBoxPosition({
-            top: editorRect.top + bounds.bottom + window.scrollY + 5,
-            left: editorRect.left + bounds.left + window.scrollX,
-          });
-
-          setShowCommentBox(true);
-        }
-      } else if (range && range.length === 0) {
-        if (showCommentBox && !commentText) {
-          setTimeout(() => setShowCommentBox(false), 200);
-        }
-      }
-    };
-
-    quill.on("selection-change", handleSelectionChange);
+      socket.current.on("document:update", (data) => {
+        isSocketUpdate.current = true;
+        setNewDoc(data);
+      });
 
     return () => {
-      quill.off("selection-change", handleSelectionChange);
+      socket.current.disconnect();
     };
-  }, [showCommentBox, commentText]);
+  }, [docId]);
 
-  function handleAddComment() {
-    if (!commentText.trim()) return;
-
-    const quill = quillRef.current.getEditor();
-    const range = quill.getSelection();
-
-    if (!range) return;
-
-    quill.formatText(range.index, range.length, "background", "#fff3cd");
-
-    const newComment = {
-      id: Date.now().toString(),
-      text: commentText.trim(),
-      selectedText: selectedText,
-      user: currentUser,
-      createdAt: new Date(),
-    };
-
-    const updatedComments = [...comments, newComment];
-    setComments(updatedComments);
-
-    const updatedDoc = {
-      ...newDoc,
-      content: quill.root.innerHTML,
-      comments: updatedComments,
-    };
+  
+  function handleTitleChange(event) {
+    const value = event.target.value;
+    const updatedDoc = { ...newDoc, title: value };
     setNewDoc(updatedDoc);
-
-    socket.current.emit("document:update", {
-      docId: docId,
-      ...updatedDoc,
-    });
-
-    setCommentText("");
-    setShowCommentBox(false);
-    setSelectedText("");
-
-    quill.setSelection(null);
-  }
-
-  function handleDeleteComment(id) {
-    const updatedComments = comments.filter((c) => c.id !== id);
-    setComments(updatedComments);
-
-    const quill = quillRef.current.getEditor();
-    const updatedDoc = {
-      ...newDoc,
-      content: quill.root.innerHTML,
-      comments: updatedComments,
-    };
-
-    socket.current.emit("document:update", {
-      docId: docId,
-      ...updatedDoc,
-    });
-  }
 
   function handleTitleChange(event) {
     const value = event.target.value;
@@ -203,8 +135,15 @@ function UpdateDoc() {
     }
   };
 
+  const deleteDoc = async () => {
+    if (window.confirm("Are you sure you want to delete the document?")) {
+      await docModel.deleteDoc(newDoc.id);
+      navigate("/my-docs");
+    }
+  };
+
   const inviteDoc = () => {
-    navigate(`/invite/${newDoc._id}`, {
+    navigate(`/invite/${newDoc.id}`, {
       replace: true,
       state: {
         doc: newDoc,
@@ -218,7 +157,11 @@ function UpdateDoc() {
   };
 
   async function saveText() {
-    await docModel.updateDoc(newDoc);
+    const docToSave = {
+      ...newDoc,
+      comments: comments
+    };
+    await docModel.updateDoc(docToSave);
     navigate("/my-docs");
   }
 
