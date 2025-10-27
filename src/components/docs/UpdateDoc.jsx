@@ -20,16 +20,16 @@ function UpdateDoc() {
   const navigate = useNavigate();
   const socket = useRef(null);
   const quillRef = useRef(null);
-  const docId = location.state.doc._id;
+  const docId = location.state.doc.id;
 
   const [newDoc, setNewDoc] = useState({
-    _id: docId,
+    id: docId,
     title: location.state.doc.title,
     content: location.state.doc.content || "",
     comments: location.state.doc.comments || [],
   });
 
-  const docId = location.state.doc.id;
+  
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const currentUser = user?.username || "Anonymous";
@@ -46,21 +46,7 @@ function UpdateDoc() {
     ],
   };
 
-  const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "color",
-    "background",
-    "list",
-    "bullet",
-    "align",
-    "link",
-    "image",
-  ];
-
+  
   useEffect(() => {
     socket.current = io(docModel.baseUrl);
     socket.current.emit("join_document", docId);
@@ -104,19 +90,14 @@ function UpdateDoc() {
   }, [docId]);
 
   
-  function handleTitleChange(event) {
-    const value = event.target.value;
-    const updatedDoc = { ...newDoc, title: value };
-    setNewDoc(updatedDoc);
-
-  function handleTitleChange(event) {
+   function handleTitleChange(event) {
     const value = event.target.value;
     const updatedDoc = { ...newDoc, title: value };
     setNewDoc(updatedDoc);
 
     if (socket.current) {
       socket.current.emit("document:update", {
-        docId: newDoc._id,
+        docId: newDoc.id,
         ...updatedDoc,
       });
     }
@@ -127,13 +108,6 @@ function UpdateDoc() {
     setNewDoc(updatedDoc);
     socket.current.emit("document:update", { docId, ...updatedDoc });
   }
-
-  const deleteDoc = async () => {
-    if (window.confirm("Are you sure you want to delete the document?")) {
-      await docModel.deleteDoc(newDoc._id);
-      navigate("/my-docs");
-    }
-  };
 
   const deleteDoc = async () => {
     if (window.confirm("Are you sure you want to delete the document?")) {
