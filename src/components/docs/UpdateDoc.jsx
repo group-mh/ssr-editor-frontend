@@ -12,10 +12,10 @@ function UpdateDoc() {
   const [highlightId, setHighlightId] = useState(null);
   const [currentRange, setCurrentRange] = useState(null);
 
-  const docId = location.state.doc._id;
+  const docId = location.state.doc.id;
 
   const [newDoc, setNewDoc] = useState({
-    _id: docId,
+    id: docId,
     title: location.state.doc.title,
     content: location.state.doc.content || "",
     comments: location.state.doc.comments || [],
@@ -145,7 +145,8 @@ function UpdateDoc() {
     handleContentChange();
 
     socket.current.emit("document:update", {
-      docId: newDoc._id,
+      // docId: newDoc.id,
+      docId: newDoc.id,
       title: newDoc.title,
       content: textareaRef.current.innerHTML,
       comments: [...comments, newComment],
@@ -210,13 +211,13 @@ function UpdateDoc() {
 
   const deleteDoc = async () => {
     if (window.confirm("Are you sure you want to delete the document?")) {
-      await docModel.deleteDoc(newDoc._id);
+      await docModel.deleteDoc(newDoc.id);
       navigate("/my-docs");
     }
   };
 
   const inviteDoc = () => {
-    navigate(`/invite/${newDoc._id}`, {
+    navigate(`/invite/${newDoc.id}`, {
       replace: true,
       state: {
         doc: newDoc,

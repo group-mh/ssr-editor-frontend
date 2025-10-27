@@ -6,7 +6,7 @@ function DocCard({ doc, showButtons = true, setDocs }) {
   const navigate = useNavigate();
 
   const editDoc = () => {
-    navigate(`/edit/${doc._id}`, {
+    navigate(`/edit/${doc.id}`, {
       replace: true,
       state: {
         doc: doc,
@@ -17,7 +17,7 @@ function DocCard({ doc, showButtons = true, setDocs }) {
   const doc_date = doc.created_at ? dateFormatted(doc.created_at) : null;
 
   const inviteDoc = () => {
-    navigate(`/invite/${doc._id}`, {
+    navigate(`/invite/${doc.id}`, {
       replace: true,
       state: {
         doc: doc,
@@ -27,12 +27,12 @@ function DocCard({ doc, showButtons = true, setDocs }) {
 
   const deleteDoc = async () => {
     if (window.confirm("Are you sure you want to delete the document?")) {
-      const result = await docModel.deleteDoc(doc._id);
+      const result = await docModel.deleteDoc(doc.id);
       if (result) {
         console.log("Deleted successfully:", result);
         // window.location.reload();
         // Get updated docuemts list/State from parent component reloading trigger unnessary fetches.
-        setDocs(prevDocs => prevDocs.filter(d => d._id !== doc._id));
+        setDocs(prevDocs => prevDocs.filter(d => d.id !== doc.id));
       } else {
         alert("Failed to delete document. See console for details.");
       }
@@ -64,7 +64,12 @@ function DocCard({ doc, showButtons = true, setDocs }) {
 }
 
 function dateFormatted(docDate) {
-  const date = new Date(docDate)
+  // const date = new Date(docDate);
+  if (!docDate) return "";
+  const timestamp = Number(docDate); // convert string to number
+  const date = new Date(timestamp);
+  // const date = new Date(docDate);
+
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
   const day = ("0" + (date.getDate())).slice(-2);
   const year = date.getFullYear();
