@@ -146,8 +146,70 @@
   }
 
   
+  @media (max-width: 700px) {
+    .create-toolbar {
+      padding: 10px 5px 80px;
+    }
 
- 
+     .create-toolbar h2{
+      margin: 4rem 0 8px 0;
+      font-size: 1.3rem;
+  }
+
+    .create-toolbar p.toolbar-description {
+      font-size: 0.85rem;
+      padding: 0 10px;
+      margin-bottom: 12px;
+    }
+
+    .toolbar-actions {
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    #doc-title {
+      width: 100%;
+      max-width: 250px;
+      font-size: 15px;
+      padding: 8px 10px;
+    }
+
+    .back-button,
+    .save-button,
+    .cancel-button {
+      font-size: 18px;
+      padding: 8px;
+    }
+
+    .create-editor-container .ql-toolbar.ql-snow {
+      position: fixed;
+      top: 190px;
+      left: 10px;
+      right: 10px;
+      border-radius: 8px;
+      padding: 8px;
+      overflow-x: auto;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .create-editor-container {
+      margin-top: 220px;
+      padding: 0 10px;
+    }
+
+    .create-editor-container .create-quill-editor {
+      width: 100%;
+      max-width: 100%;
+      min-height: 60vh;
+      margin-top: 40px;
+    }
+
+    .create-editor-container .ql-editor {
+      min-height: 70vh;
+      padding: 20px 15px;
+    }
+}
 
   @media print {
       body {
