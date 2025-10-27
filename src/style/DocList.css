@@ -52,10 +52,6 @@
   background-color: #f8faff;
 }
 
-
-
-
-
 .doc-icon {
   color: #007bff;
 }
@@ -166,4 +162,99 @@
   color: #777;
   font-size: 14px;
   text-align: center;
+}
+
+
+
+@media (max-width: 700px) {
+  .all-docs {
+    padding: 10px;
+  }
+
+  .docs-container {
+    min-width: unset;
+    max-width: 100%;
+    margin-top: 50px;
+    
+    box-shadow: none;
+    border: none;
+    background: transparent;
+  }
+  
+  .docs-grid {
+    display: none;
+  }
+
+  .doc-row,
+  .my-doc-row {
+    display: block;
+    grid-template-columns: unset;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 16px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+   .doc-row:hover,
+   .my-doc-row:hover {
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+   }
+
+  .title-column,
+  .author-column,
+  .created-column {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    white-space: normal;
+    overflow: visible;
+    max-width: none;
+    gap: 0;
+  }
+
+  .title-column {
+    margin-bottom: 14px;
+  }
+
+  .title-doc {
+    font-weight: 600;
+    font-size: 16px;
+    color: #212529;
+    white-space: normal;
+    display: flex;
+  }
+
+  .title-doc span {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .author-column::before {
+    content: "Author: ";
+    font-weight: 600;
+    margin-right: 6px;
+    color: #495057;
+  }
+
+  .created-column::before {
+    content: "Created: ";
+    font-weight: 600;
+    margin-right: 6px;
+    color: #495057;
+  }
+
+  .created-column,
+  .created-column {
+    font-size: 14px;
+    color: #6c757d;
+  }
+
+  .created-column {
+    margin-bottom: 0;
+  }
+
 }
