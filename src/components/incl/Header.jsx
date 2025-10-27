@@ -9,13 +9,14 @@ import {
   faUser,
   faPlus,
   faUserCircle,
-  
+  faBars,  
 } from "@fortawesome/free-solid-svg-icons";
 import CreateEditor from "../docs/CreateEditor";
 
 function Header({ user, token, onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -56,6 +57,39 @@ function Header({ user, token, onLogout }) {
             </button>
           </div>
         </div>
+
+        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+
+        {menuOpen && (
+          <div className="mobile-menu">
+            {token && (
+              <div className="mobile-user">
+                <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
+                <div className="user-info">
+                  <span className="username">{user?.username || "Unknown"}</span>
+                  <span className="user-email">{user?.email || ""}</span>
+                </div>
+                <button className="logout-button" onClick={onLogout}>
+                  Logout
+                </button>
+                </div>
+            )}
+            
+            <button onClick={() => { navigate("/"); setMenuOpen(false);}}>
+              All Docs
+            </button>
+            {token && (
+              <button onClick={() => { navigate("/my-docs"); setMenuOpen(false); }}>
+                My Docs
+              </button>
+            )}
+            <button onClick={() => { navigate("/create"); setMenuOpen(false); }}>
+                New
+              </button>
+          </div>
+        )}
 
         <div className="navbar-right">
           {token ? (
