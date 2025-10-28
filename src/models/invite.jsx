@@ -1,5 +1,7 @@
 const inviteModel = {
-  baseUrl: "http://localhost:1337",
+  baseUrl: window.location.href.includes("localhost")
+    ? "http://localhost:1337"
+    : "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net",
 
   sendInvite: async function (docId, email) {
     try {
