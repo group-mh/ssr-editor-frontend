@@ -36,7 +36,11 @@ function MyDocList({ docs, setDocs }) {
   }, []);
 
   function dateFormatted(docDate) {
-    const date = new Date(docDate);
+    if (!docDate) return "";
+
+    const timestamp = Number(docDate);
+    const date = new Date(timestamp);
+
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     const day = ("0" + date.getDate()).slice(-2);
     const year = date.getFullYear();
@@ -47,25 +51,24 @@ function MyDocList({ docs, setDocs }) {
 
   async function handleDelete(doc) {
     if (confirm(`Are you sure you want to delete "${doc.title}"?`)) {
-      const result = await docModel.deleteDoc(doc._id);
+      const result = await docModel.deleteDoc(doc.id);
       if (result) {
         console.log("Deleted successfully:", result);
-        setDocs((prevDocs) => prevDocs.filter((d) => d._id !== doc._id));
+        setDocs((prevDocs) => prevDocs.filter((d) => d.id !== doc.id));
       } else {
         alert("Failed to delete document.");
       }
     }
   }
-  
+
   function handleUpdate(doc) {
-    navigate(`/edit/${doc._id}`, {
+    navigate(`/edit/${doc.id}`, {
       state: {
         doc: doc,
       },
     });
   }
 
-  
   function handleInvite(docId) {
     navigate(`/invite/${docId}`);
   }
@@ -85,15 +88,17 @@ function MyDocList({ docs, setDocs }) {
         ) : (
           docs.map((doc) => {
             const title = doc.title;
-            const author = doc.author.join(", ");
+            const author = Array.isArray(doc.author)
+              ? doc.author.join(", ")
+              : doc.author || "Unknown";
             const created = dateFormatted(doc.created_at);
 
             return (
               <div
                 className="my-doc-row"
-                key={doc._id}
+                key={doc.id}
                 onClick={() => {
-                  console.log("Row clicked: ", doc._id);
+                  console.log("Row clicked: ", doc.id);
                   handleUpdate(doc);
                 }}
               >
@@ -113,7 +118,7 @@ function MyDocList({ docs, setDocs }) {
                     title="Invite"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleInvite(doc._id);
+                      handleInvite(doc.id);
                     }}
                   >
                     <FontAwesomeIcon icon={faUserPlus} />
