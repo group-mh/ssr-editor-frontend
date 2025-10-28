@@ -34,7 +34,6 @@ const auth = {
 
       return { token };
 
-      return { token: result.data.login };
     } catch (err) {
       console.error("login error:", err);
       return { error: err.message };
