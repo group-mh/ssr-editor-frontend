@@ -5,9 +5,7 @@ const inviteModel = {
     try {
       const token = localStorage.getItem("token");
       const user = JSON.parse(localStorage.getItem("user"));
-      // const from = user?.username;
 
-      // console.log("sending invite, docid:", docId, "email:", email, "from", from);
       console.log("sending invite, docid:", docId, "email:", email);
 
       const mutation = `
@@ -16,7 +14,6 @@ const inviteModel = {
           }
         `;
 
-      // const response = await fetch(`${inviteModel.baseUrl}/docs/${docId}/invite`, {
       const response = await fetch(`${inviteModel.baseUrl}/graphql`, {
         headers: {
           "content-type": "application/json",
@@ -46,7 +43,6 @@ const inviteModel = {
       return {
         success: true,
         message: result.data?.inviteUser || "Invite has been sent."
-        // message: result.data?.inviteUser?.message || "Invite has been sent.",
       };
     } catch (error) {
       console.error("sendInvite error:", error.message);
