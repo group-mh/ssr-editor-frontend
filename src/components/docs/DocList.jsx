@@ -2,18 +2,22 @@ import { useEffect } from "react";
 import docModel from "../../models/documents";
 import "../../style/DocList.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileLines} from "@fortawesome/free-regular-svg-icons";
-
+import { faFileLines } from "@fortawesome/free-regular-svg-icons";
 
 function DocList({ docs, setDocs }) {
-  
   async function fetchAllDocs() {
     const allDocs = await docModel.getAllDocs();
+
+    console.log("Docs fetched:", allDocs);
+    if (allDocs.length > 0) {
+      console.log("First doc created: ", allDocs[0].created_at);
+      console.log("First doc keys: ", Object.keys(allDocs[0]));
+    }
 
     const sortedDocs = allDocs.sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     );
-    
+
     setDocs(sortedDocs);
   }
 
@@ -22,7 +26,11 @@ function DocList({ docs, setDocs }) {
   }, []);
 
   function dateFormatted(docDate) {
-    const date = new Date(docDate);
+    if (!docDate) return "";
+
+    const timestamp = Number(docDate);
+    const date = new Date(timestamp);
+
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     const day = ("0" + date.getDate()).slice(-2);
     const year = date.getFullYear();
@@ -44,20 +52,23 @@ function DocList({ docs, setDocs }) {
           <div className="docs-empty">No documents in the database.</div>
         ) : (
           docs.map((doc) => {
-
             const title = doc.title;
-            const author = doc.author.join(", ");
+            const author = Array.isArray(doc.author)
+              ? doc.author.join(", ")
+              : (doc.author || "Unknown");
             const created = dateFormatted(doc.created_at);
 
             return (
-              <div className="doc-row" key={doc._id}>
+              <div className="doc-row" key={doc.id}>
                 <div className="title-column">
                   <span className="title-doc" title={title}>
                     <FontAwesomeIcon icon={faFileLines} className="doc-icon" />
                     <span>{title}</span>
                   </span>
                 </div>
-                <div className="author-column" title={author}>{author}</div>
+                <div className="author-column" title={author}>
+                  {author}
+                </div>
                 <div className="created-column">{created}</div>
               </div>
             );
