@@ -1,42 +1,42 @@
 /// <reference types="cypress" />
 
-const API =
-  "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net";
+describe("Delete Document", () => {
+    it("user can delete a document", () => {
+        // login
+        cy.visit("/ssr-editor-frontend/login");
+        cy.get('input[type="email"]').type("test@email.com");
+        cy.get('input[type="password"]').type("test");
+        cy.get('button[type="submit"]').click();
 
-describe("Delete document", () => {
-  const DOC = { _id: "1", title: "Doc A", content: "New document" };
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+        cy.wait(1000);
 
-  it("user can delete a document", () => {
-    
-    let deleted = false;
+        cy.contains('button', 'New').click();
+        
+        cy.url().should("include", "/create");
 
-    cy.intercept("GET", `${API}/docs`, {
-      statusCode: 200,
-      body: { data: deleted ? [] : [DOC] },
-    }).as("getDocs");
+        cy.get('input#doc-title',  { timeout: 10000 })
+            .should('be.visible')
+            .type("Document to Delete");
 
-    cy.intercept("DELETE", `${API}/docs/${DOC._id}`, (req) => {
-      req.reply({ statusCode: 200, body: { success: true }, });
-      deleted = true;
-    }).as("deleteDoc");
+        cy.get('.ql-editor')
+            .should('be.visible')
+            .type("Test Content");
+        
+        cy.get('button.save-button').click();
 
-    cy.on("window confirm", (text) => {
-      expect(text).to.match(/delete the document/i)
-      return true;
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+
+         cy.contains('.my-doc-row', 'Document to Delete', { timeout: 10000 })
+          .should("be.visible")
+          .within(() => {
+            cy.get('button.delete-btn')
+                .should('be.visible')
+                .click();
+          });
+
+        cy.on('window:confirm', () => true);
+
+        cy.contains('.my-doc-row', 'Document to Delete').should("not.exist");
     });
-
-    cy.visit("/ssr-editor-frontend/docs");
-    cy.wait("@getDocs");
-    cy.contains("h2", DOC.title).should("be.visible");
-
-    cy.contains("h2", DOC.title)
-      .closest(".card")
-      .find("button.delete-btn")
-      .click();
-
-    cy.wait("@deleteDoc");
-    cy.wait("@getDocs");
-
-    cy.contains("h2", DOC.title).should("not.exist");
-  });
 });
