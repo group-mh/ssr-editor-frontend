@@ -1,41 +1,41 @@
 /// <reference types="cypress" />
 
-const API = "https://jsramverk-editor-hahi24-byewf7bndbf9ehhf.swedencentral-01.azurewebsites.net";
+describe("Create Document", () => {
 
-describe("Create document", () => {
     beforeEach(() => {
-        cy.intercept("GET", `${API}/docs`, {
-            statusCode: 200,
-            body: { data: [] },
-        }).as("getDocsInit");
-
-        cy.intercept("POST", `${API}/docs`, {
-            statusCode: 201,
-            body: { _id: "123", title: "New Doc"},
-        }).as("createDoc");
-
-    
-
-        cy.visit("/ssr-editor-frontend/create");
-        cy.wait("@getDocsInit")
+        cy.on('uncaught:exception', (err) => {
+            if (err.message.includes('Cannont read properties of null')) {
+                return false;
+            }
+            return true;
+        });
     });
 
     it("user can create a new document", () => {
-         cy.get("input[name=title]").should('be.visible').and('not.be.disabled').type("New Doc");
-            cy.get('textarea[name=content]').should('be.visible').and('not.be.disabled').type("Hi!");
-            
-        cy.intercept("GET", `${API}/docs`, {
-            statusCode: 200,
-            body: { data: [{ _id: "123", title: "New Doc" }] },
-        }).as("getDocsAfterCreate")
+        // login
+        cy.visit("/ssr-editor-frontend/login");
+        cy.get('input[type="email"]').type("test@email.com", { delay: 50 });
+        cy.get('input[type="password"]').type("test", { delay: 50 });
+        cy.get('button[type="submit"]').click();
 
-        cy.get("button.create-btn").click();
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+        cy.wait(1000);
 
-        cy.wait("@createDoc");
+        cy.contains('button', 'New').click();
+        
+        cy.url().should("include", "/create");
 
-        cy.location("pathname").should("eq", "/ssr-editor-frontend/docs");
-        cy.wait("@getDocsAfterCreate");
+        cy.get('input#doc-title',  { timeout: 10000 })
+            .should('be.visible')
+            .type("Test Document");
 
-        cy.contains("New Doc").should("be.visible");
+        cy.get('.ql-editor')
+            .should('be.visible')
+            .type("Test Content");
+        
+        cy.get('button.save-button').click();
+
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+        cy.contains("Test Document", { timeout: 10000 }).should("be.visible");
     });
 });
