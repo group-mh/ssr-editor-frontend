@@ -1,0 +1,209 @@
+.toolbar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 0 20px;
+    z-index: 999;
+}
+
+
+.back-button,
+.delete-button,
+.save-button,
+.cancel-button,
+.invite-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    color: #333;
+    font-size: 20px;
+    transition: color 0.2s ease;
+}
+
+.back-button:hover,
+.invite-button:hover,
+.save-button:hover {
+    color: #007bff;
+}
+
+.delete-button:hover,
+.cancel-button:hover {
+    color:  #d9534f;;
+}
+
+#doc-title {
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    padding: 5px 10px;
+    width: 200px;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+  .update-editor-container {
+    margin-top: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .update-editor-container .update-quill-editor {
+      width: 8.5in;
+      min-height: 11in;
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, .1);
+      background-color: white;
+  }
+
+ 
+  .update-editor-container .ql-toolbar.ql-snow {
+      position: fixed;
+      top: 115px;
+      left: 200px;
+      right: 200px;
+      z-index: 1001;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 5px;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      border-radius: 25px;
+      background-color: #f0f4f9;
+  }
+
+  .update-editor-container .ql-container.ql-snow {
+    border: none;
+    margin-top: 10px;
+  }
+
+  .update-editor-container {
+    
+    position: relative;
+    margin-top: 180px;
+  }
+  
+  .update-editor-container .ql-editor {
+    min-height: 11in;
+  }
+
+ .toolbar-actions2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      padding-top: 50px;
+      z-index: 1002;
+  }
+
+body {
+    background-color: #F3F3F3;
+    margin: 0;
+}
+
+ @media (max-width: 700px) {
+    .create-toolbar {
+      padding: 10px 5px 20px;
+    }
+
+    .toolbar-actions2 {
+        gap: 15px;
+        flex-wrap: wrap;
+        padding-top: 70px;
+    }
+
+      #doc-title {
+      width: 100%;
+      max-width: 250px;
+      font-size: 15px;
+      padding: 8px 10px;
+    }
+
+     .back-button,
+    .invite-button,
+    .delte-button {
+      font-size: 18px;
+      padding: 8px;
+    }
+
+     .update-editor-container .ql-toolbar.ql-snow {
+      position: fixed;
+      top: 130px;
+      left: 10px;
+      right: 10px;
+      border-radius: 8px;
+      padding: 8px;
+      overflow-x: auto;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .update-editor-container {
+        margin-top: 200px;
+        padding: 0 10px;
+    }
+
+    .update-editor-container .update-quill-editor {
+      width: 100%;
+      max-width: 100%;
+      min-height: 60vh;
+    }
+     
+    .update-editor-container .ql-editor {
+      min-height: 70vh;
+      padding: 20px 15px;
+    }
+
+
+     .create-toolbar h2{
+      margin: 4rem 0 8px 0;
+      font-size: 1.3rem;
+  }
+
+    .create-toolbar p.toolbar-description {
+      font-size: 0.85rem;
+      padding: 0 10px;
+      margin-bottom: 12px;
+    }
+
+    .create-editor-container {
+      margin-top: 220px;
+      padding: 0 10px;
+    }
+
+ 
+}
+
+@media print {
+    body {
+        background: none;
+    }
+
+    .editor-container .ql-editor {
+        width: 6.5in;
+        min-height: 9in;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+        align-self: flex-start;
+    }
+
+    .editor-container .ql-toolbar {
+        display: none;
+    }
+}
+

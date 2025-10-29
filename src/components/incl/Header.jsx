@@ -1,19 +1,120 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import "../../style/Header.css";
+import "../../style/CreateEditor.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFileLines,
+  faFolderOpen,
+  faUser,
+  faPlus,
+  faUserCircle,
+  faBars,  
+} from "@fortawesome/free-solid-svg-icons";
+import CreateEditor from "../docs/CreateEditor";
 
-function Header() {
+function Header({ user, token, onLogout }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <header className="header">
-      <h1 className="logo" onClick={() => navigate("/")}>
-        SSR Editor
-      </h1>
-      <nav className="nav-buttons">
-        <button className="nav-btn" onClick={() => navigate("/")}>Home</button>
-        <button className="nav-btn" onClick={() => navigate("/create")}>Create document</button>
-      </nav>
-    </header>
+    <>
+      <header className="navbar">
+        <div className="navbar-left">
+          <div className="logo-container" onClick={() => navigate("/")}>
+            <FontAwesomeIcon icon={faFileLines} className="logo-icon" />
+            <span className="logo-text">SSR Editor</span>
+          </div>
+
+          <div className="doc-menu">
+            <button
+              className={`doc-menu-btn ${isActive("/docs") ? "active" : ""}`}
+              onClick={() => navigate("/")}
+            >
+              <FontAwesomeIcon icon={faFolderOpen} />
+              All Docs
+            </button>
+
+            {token && (
+              <button
+                className={`doc-menu-btn ${isActive("/my-docs") ? "active" : ""}`}
+                onClick={() => navigate("/my-docs")}
+              >
+                <FontAwesomeIcon icon={faUser} />
+                My Docs
+              </button>
+            )}
+
+            <button
+              className={`doc-menu-btn ${isActive("/create") ? "active" : ""}`}
+              onClick={() => navigate("/create")}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              New
+            </button>
+          </div>
+        </div>
+
+        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+
+        {menuOpen && (
+          <div className="mobile-menu">
+            {token && (
+              <div className="mobile-user">
+                <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
+                <div className="user-info">
+                  <span className="username">{user?.username || "Unknown"}</span>
+                  <span className="user-email">{user?.email || ""}</span>
+                </div>
+                <button className="logout-button" onClick={onLogout}>
+                  Logout
+                </button>
+                </div>
+            )}
+            
+            <button onClick={() => { navigate("/"); setMenuOpen(false);}}>
+              All Docs
+            </button>
+            {token && (
+              <button onClick={() => { navigate("/my-docs"); setMenuOpen(false); }}>
+                My Docs
+              </button>
+            )}
+            <button onClick={() => { navigate("/create"); setMenuOpen(false); }}>
+                New
+              </button>
+          </div>
+        )}
+
+        <div className="navbar-right">
+          {token ? (
+            <>
+              <div className="user">
+                <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
+                <div className="user-info">
+                  <span className="username">
+                    {user?.username || "Unknown"}
+                  </span>
+                  <span className="user-email">{user?.email || ""}</span>
+                </div>
+                <button className="logout-button" onClick={onLogout}>
+                  Logout
+                </button>
+              </div>
+            </>
+          ) : (
+            <button className="login-button" onClick={() => navigate("/login")}>
+              Login
+            </button>
+          )}
+        </div>
+      </header>
+    </>
   );
 }
 

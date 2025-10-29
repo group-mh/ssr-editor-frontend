@@ -1,0 +1,96 @@
+.login-register-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 10px);
+    padding: 20px;
+    /* background-color: #f3f3f3; */
+}
+
+.login-register-form {
+    width: 100%;
+    max-width: 400px;
+    align-self: center;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: box-shadow 0.25s ease transform 0.25s ease;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+}
+
+.login-register-form h2{
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.login-register-form input{
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.login-register-form input:focus{
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+.login-register-form button[type="submit"] {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.login-register-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.login-register-form p.status {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #d9534f;
+}
+
+.login-register-form p.switch-mode {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-register-form p.switch-mode button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0;
+}
+
+.login-register-form p.switch-mode button:hover {
+    text-decoration: underline;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
