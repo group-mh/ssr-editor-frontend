@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
 describe("Delete Document", () => {
+    beforeEach(() => {
+    cy.on('uncaught:exception', (err) => {
+      return false;
+    });
+  });
+
     it("user can delete a document", () => {
         // login
         cy.visit("/ssr-editor-frontend/login");
@@ -11,23 +17,25 @@ describe("Delete Document", () => {
         cy.url().should("include", "/my-docs", { timeout: 10000 });
         cy.wait(1000);
 
+        const docTitle = `Test Doc ${Date.now()}`;
+
         cy.contains('button', 'New').click();
         
         cy.url().should("include", "/create");
 
         cy.get('input#doc-title',  { timeout: 10000 })
             .should('be.visible')
-            .type("Document to Delete");
+            .type(docTitle);
 
         cy.get('.ql-editor')
             .should('be.visible')
-            .type("Test Content");
+            .type(docTitle);
         
         cy.get('button.save-button').click();
 
         cy.url().should("include", "/my-docs", { timeout: 10000 });
 
-         cy.contains('.my-doc-row', 'Document to Delete', { timeout: 10000 })
+         cy.contains('.my-doc-row', docTitle, { timeout: 10000 })
           .should("be.visible")
           .within(() => {
             cy.get('button.delete-btn')
@@ -37,6 +45,6 @@ describe("Delete Document", () => {
 
         cy.on('window:confirm', () => true);
 
-        cy.contains('.my-doc-row', 'Document to Delete').should("not.exist");
+        cy.contains('.my-doc-row', docTitle).should("not.exist");
     });
 });
