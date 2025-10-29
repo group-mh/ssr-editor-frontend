@@ -1,57 +1,149 @@
 /// <reference types="cypress" />
 
-describe("Docs page (stubbed)", () => {
-    const ORIGINAL = { _id: "1", title: "Doc A", content: "New Document" };
-    const UPDATED = { ...ORIGINAL, title: "Doc A (updated)", };
+import { within } from "@testing-library/react";
 
-    beforeEach(() => {
-        cy.on("uncaught:exception", (err) => {
-            if (/reading 'document'/.test(err.message)) return false;
-        });       
+describe("Update Document", () => {
+    it("user can edit document title and content", () => {
+         // login
+        cy.visit("/ssr-editor-frontend/login");
+        cy.get('input[type="email"]').type("test@email.com", { delay: 50 });
+        cy.get('input[type="password"]').type("test", { delay: 50 });
+        cy.get('button[type="submit"]').click();
 
-        cy.intercept(
-            { method: "GET", url: "**/docs*"}, 
-            { statusCode: 200, body: { data: [ORIGINAL] } }
-        ).as("getDocs");
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+        cy.wait(1000);
+
+        //create a new document
+        cy.contains('button.doc-menu-btn', 'New').click();
+        cy.url().should("include", "/create");
+
+
+    cy.get('input#doc-title', { timeout: 10000 })
+      .should('be.visible')
+      .type("Document to Edit");
+
+    cy.get('.ql-editor')
+      .should('be.visible')
+      .type("Original content");
+
+    cy.get('button.save-button').click();
+    cy.url().should("include", "/my-docs", { timeout: 10000 });
+
+    cy.contains('.my-doc-row', 'Document to Edit', { timeout: 10000 })
+      .should('be.visible')
+      .click();
+
+    cy.url().should("include", "/edit", { timeout: 10000 });
+
+    // Edit title
+    cy.get('input#doc-title')
+        .should('be.visible')
+        .clear()
+        .type("Updated Document Title");
+
+        // Edit the content
+        cy.get('.ql-editor')
+            .should('be.visible')
+            .clear()
+            .type("Updated content here");
+
+        cy.wait(1000);
+
+        cy.get('button.back-button').click();
+
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+
+        // verify the updated title is shown in my-docs
+        cy.contains('.my-doc-row', 'Updated Document Title', { timeout: 10000 })
+            .should('be.visible');
+
+        // delete the document
+        cy.contains('.my-doc-row', 'Updated Document Title')
+            .within(() => {
+                cy.get('button.delete-btn')
+                .should('be.visible')
+                .click({ force: true })
+            });
+
+        cy.wait(2000);
+
+        cy.contains('.my-doc-row', 'Updated Document Title').should('not.exist');
     });
 
-    it("user can update an existing document", () => {
-        cy.visit("/");
-        cy.wait("@getDocs");
-
-        //cy.location("pathname").should("eq", "/docs");
-
-        cy.contains("Doc A").parents(".card").within(() => {
-            cy.contains("Edit").click();
-        });
-
-        cy.intercept(
-            { method: "PUT", url: "**/docs/1"}, 
-            { statusCode: 200, body: { data: UPDATED } }
-        ).as("putDoc");
-
-        cy.intercept(
-            { method: "GET", url: "**/docs*"}, 
-            { statusCode: 200, body: { data: [UPDATED] } }
-        ).as("getDocsAfterUpdate");
-
-        cy.get('input[name="title"]').clear().type(UPDATED.title);
-
-        cy.get("button.create-btn").click();
-
-        cy.wait("@putDoc").its("request").then(({ body, method, url }) => {
-            expect(method).to.eq("PUT");
-            expect(url).to.match(/\/docs\/1$/);
-            expect(body).to.have.property("title", UPDATED.title);
-            expect(body).to.not.have.property("_id");
-            
-        });
-
-        cy.wait("@getDocsAfterUpdate");
-        cy.contains(UPDATED.title).should("be.visible");
-        cy.get(".list .card").should("have.length", 1);
-        cy.get(".list .card h2").eq(0).should("have.text", UPDATED.title);
 
 
+    it("user can invite collaborators to a document", () => {
+         // login
+        cy.visit("/ssr-editor-frontend/login");
+        cy.get('input[type="email"]').type("test@email.com", { delay: 50 });
+        cy.get('input[type="password"]').type("test", { delay: 50 });
+        cy.get('button[type="submit"]').click();
+
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+        cy.wait(1000);
+
+        //create a new document to share with 
+        cy.contains('button.doc-menu-btn', 'New').click();
+        cy.url().should("include", "/create");
+
+        const sharedDocTitle = `Test Doc ${Date.now()}`;
+
+        cy.get('input#doc-title', { timeout: 10000 })
+        .should('be.visible')
+        .type(sharedDocTitle);
+
+        cy.get('.ql-editor')
+            .should('be.visible')
+            .type("Content to share with collaborator");
+        
+        cy.get('button.save-button').click();
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+
+        // click invite button from my-docs
+        cy.contains('.my-doc-row', sharedDocTitle, { timeout: 10000 })
+            .should('be.visible')
+            .within(() => {
+                cy.get('button.invite-btn').click();
+            });
+
+        cy.url().should("include", "/invite", { timeout: 10000 });
+
+        // enter email to collaborator
+        cy.get('input#email', { timeout: 10000 })
+            .should('be.visible')
+            .type("mats.jonstromer@gmail.com");
+
+        // click send invite button
+        cy.contains('button.invite-btn', 'Send invite').click();
+
+        cy.wait(3000);
+
+        cy.get('.invite-status.success', { timeout: 10000 })
+            .should('be.visible');
+        
+        // Logout test@email.com
+        cy.get('button.logout-button').click();
+
+        cy.wait(1000);
+
+        // Login as mats.jonstromer@gmail.com
+        cy.visit("/ssr-editor-frontend/login");
+        cy.get('input[type="email"]').type("mats.jonstromer@gmail.com", { delay: 50 });
+        cy.get('input[type="password"]').type("mats", { delay: 50 });
+        cy.get('button[type="submit"]').click();
+
+        cy.url().should("include", "/my-docs", { timeout: 10000 });
+        
+        // check to see if shared documents is displayed in Mats my-docs
+        cy.contains('.my-doc-row', sharedDocTitle, { timeout: 10000 })
+            .should('be.visible')
+            .within(() => {
+                cy.get('button.delete-btn').click();
+            });
+
+        // confirm delete
+        cy.on('window:confirm', () => true);
+
+        cy.contains('.my-doc-row', sharedDocTitle).should('not.exist');
     });
-    });
+});
