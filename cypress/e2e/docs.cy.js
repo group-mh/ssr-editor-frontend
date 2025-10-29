@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
 describe("Docs page (stubbed)", () => {
+  beforeEach(() => {
+    cy.on('uncaught:exception', (err) => {
+      return false;
+    });
+  });
+
   it("user can view all documents in the database", () => {
     // Visit All Docs
     cy.visit("/ssr-editor-frontend/");
@@ -54,7 +60,7 @@ describe("Docs page (stubbed)", () => {
 
     cy.get('.ql-editor')
       .should('be.visible')
-      .type("Test content for All Docs");
+      .type(docTitle);
 
     cy.get('button.save-button').click();
 

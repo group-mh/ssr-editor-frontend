@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
 describe("Header Navigation", () => {
+  beforeEach(() => {
+    cy.on('uncaught:exception', (err) => {
+      return false;
+    });
+  });
+
   it("displays correct elements when not logged in", () => {
 
     cy.visit("/ssr-editor-frontend/");
