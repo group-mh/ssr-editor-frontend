@@ -17,6 +17,10 @@ const docModel = {
             id
             user
             text
+            selectedText
+            createdAt
+            index
+            length
           }
         }
       }
@@ -55,6 +59,10 @@ const docModel = {
               id
               user
               text
+              selectedText
+              createdAt
+              index
+              length
             }
           }
         }
@@ -101,6 +109,10 @@ const docModel = {
                 id
                 user
                 text
+                selectedText
+                createdAt
+                index
+                length
               }
             }
           }
@@ -148,6 +160,10 @@ const docModel = {
             id
             user
             text
+            selectedText
+            createdAt
+            index
+            length
           }
         }
       }

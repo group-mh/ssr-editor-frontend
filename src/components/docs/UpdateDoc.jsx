@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import docModel from "../../models/documents";
 import "../../style/CreateEditor.css";
 import "../../style/UpdateDoc.css";
-
+import "../../style/Comments.css";
 import { io } from "socket.io-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -38,11 +38,26 @@ function UpdateDoc() {
     left: 0,
   });
   const [selectedText, setSelectedText] = useState("");
-
   const [selectedComment, setSelectedComment] = useState(null);
+
+  const [selectedRange, setSelectedRange] = useState(null);
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const currentUser = user?.username || "Anonymous";
+
+  function dateFormatted(docDate) {
+    if (!docDate) return "";
+
+    const date = new Date(docDate);
+    if (isNaN(date.getTime())) return "Invalid date";
+
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    const year = date.getFullYear();
+    const hour = ("0" + date.getHours()).slice(-2);
+    const min = ("0" + date.getMinutes()).slice(-2);
+    return year + "-" + month + "-" + day + " " + hour + ":" + min;
+  }
 
   const modules = {
     toolbar: [
@@ -80,31 +95,51 @@ function UpdateDoc() {
 
     socket.current.on("document:update", (data) => {
       isSocketUpdate.current = true;
-      setNewDoc(data);
+
+      setNewDoc(prev => ({
+        ...prev,
+        title: data.title || prev.title,
+        content: data.content || prev.content,
+        comments: prev.comments
+      }));
+
+       });
+      /* setNewDoc(data);
       if (data.comments) {
         setComments(data.comments);
       }
-    });
+    }); */
 
     return () => {
       socket.current.disconnect();
     };
   }, [docId]);
 
+
   useEffect(() => {
     const editor = quillRef.current?.getEditor();
-    if (!editor || comments.length === 0) return;
+    if (!editor) return;
 
-    // highlighting
-    comments.forEach((comment) => {
-      if (comment.index !== undefined && comment.length !== undefined) {
-        editor.formatText(comment.index, comment.length, {
-          background: "#fff3cd",
-        });
-      }
-    });
-  }, [comments]);
+    const fullLength = editor.getLength();
+    editor.formatText(0, fullLength, { background: false });
 
+    // add highlihting on all comments
+      if (comments.length > 0) {
+        comments.forEach((comment) => {
+          if (
+            comment.index !==null &&
+            comment.index !==undefined &&
+            comment.length !== null &&
+            comment.length !== undefined
+          ) {
+            editor.formatText(comment.index, comment.length, {
+              background: "#fff3cd",
+            });
+          }
+          });
+        }
+        }, [comments]);
+    
   useEffect(() => {
     const editor = quillRef.current?.getEditor();
     if (!editor) return;
@@ -168,7 +203,11 @@ function UpdateDoc() {
       return;
     }
 
-    const updatedDoc = { ...newDoc, content: value };
+    const updatedDoc = { 
+      ...newDoc, 
+      content: value,
+      comments: comments 
+    };
     setNewDoc(updatedDoc);
 
     if (socket.current) {
@@ -202,12 +241,32 @@ function UpdateDoc() {
   };
 
   function handleAddComment() {
-    if (!commentText.trim()) return;
+    console.log("--- handleAddComment Called ----")
+    console.log("commentText:", commentText)
+    console.log("selectedText:", selectedText)
+    console.log("selectedText:", selectedRange)
 
-    const editor = quillRef.current?.getEditor();
+    if (!commentText.trim()) {
+      console.log("EARLY RETURN, No comment text");
+      return;
+    }
+
+    if (!selectedRange) {
+      console.log("EARLY RETURN: No selected range");
+      return;
+    }
+
+   /*  const editor = quillRef.current?.getEditor();
     const selection = editor?.getSelection();
 
-    if (!selection) return;
+    console.log("Editor:", editor);
+    console.log("Selection:", selection); */
+
+    /* if (!selection) {
+      console.log("EARLY RETURN No selection")
+    }
+
+    if (!selection) return; */
 
     const newComment = {
       id: Date.now().toString(),
@@ -215,9 +274,11 @@ function UpdateDoc() {
       selectedText: selectedText,
       text: commentText,
       createdAt: new Date().toISOString(),
-      index: selection.index,
-      length: selection.length,
+      index: selectedRange.index,
+      length: selectedRange.length,
     };
+
+    console.log("Creating comment:", newComment);
 
     const updatedComments = [...comments, newComment];
     setComments(updatedComments);
@@ -229,8 +290,10 @@ function UpdateDoc() {
 
     setNewDoc(updatedDoc);
 
-    if (editor && selection) {
-      editor.formatText(selection.index, selection.length, {
+    const editor = quillRef.current?.getEditor();
+
+    if (editor && selectedRange) {
+      editor.formatText(selectedRange.index, selectedRange.length, {
         background: "#fff3cd",
       });
     }
@@ -245,6 +308,9 @@ function UpdateDoc() {
     setShowCommentBox(false);
     setCommentText("");
     setSelectedText("");
+    setSelectedRange(null);
+
+    console.log("=== handleAddComment END ===")
   }
 
   function handleDeleteComment(commentId) {
@@ -290,6 +356,12 @@ function UpdateDoc() {
       const text = selection.toString().trim();
 
       if (text && quillRef.current) {
+        const editor = quillRef.current.getEditor();
+        const quillRange = editor?.getSelection();
+
+        if (quillRange && quillRange.length > 0) {
+          setSelectedRange(quillRange);
+        
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
 
@@ -299,6 +371,7 @@ function UpdateDoc() {
           left: rect.left + window.scrollX,
         });
         setShowCommentBox(true);
+        }
       }
     };
 
@@ -388,7 +461,7 @@ function UpdateDoc() {
                 <div className="comment-header">
                   <span className="comment-author">{comment.user}</span>
                   <span className="comment-timestamp">
-                    {new Date(comment.createdAt).toLocaleDateString()}
+                    {dateFormatted(comment.createdAt)}
                   </span>
                 </div>
 
@@ -437,6 +510,7 @@ function UpdateDoc() {
                 setShowCommentBox(false);
                 setCommentText("");
                 setSelectedText("");
+                setSelectedRange(null);
               }}
               className="comment-box-cancel-btn"
             >

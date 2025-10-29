@@ -27,7 +27,7 @@ describe("Create Document", () => {
 
         cy.get('input#doc-title',  { timeout: 10000 })
             .should('be.visible')
-            .type("Test Document");
+            .type("Test Document Create");
 
         cy.get('.ql-editor')
             .should('be.visible')
@@ -35,7 +35,14 @@ describe("Create Document", () => {
         
         cy.get('button.save-button').click();
 
+        cy.wait(2000);
+
         cy.url().should("include", "/my-docs", { timeout: 10000 });
-        cy.contains("Test Document", { timeout: 10000 }).should("be.visible");
+
+        cy.contains('.my-doc-row', 'Test Document Create', { timeout: 10000 })
+          .should("be.visible")
+          .within(() => {
+            cy.get('button.delete-btn').click();
+          })
     });
 });
