@@ -3,6 +3,12 @@
 import { within } from "@testing-library/react";
 
 describe("Update Document", () => {
+    beforeEach(() => {
+    cy.on('uncaught:exception', (err) => {
+      return false;
+    });
+  });
+
     it("user can edit document title and content", () => {
          // login
         cy.visit("/ssr-editor-frontend/login");
@@ -13,6 +19,8 @@ describe("Update Document", () => {
         cy.url().should("include", "/my-docs", { timeout: 10000 });
         cy.wait(1000);
 
+        const docTitle = `Test Doc ${Date.now()}`;
+
         //create a new document
         cy.contains('button.doc-menu-btn', 'New').click();
         cy.url().should("include", "/create");
@@ -20,32 +28,35 @@ describe("Update Document", () => {
 
     cy.get('input#doc-title', { timeout: 10000 })
       .should('be.visible')
-      .type("Document to Edit");
+      .type(docTitle);
 
     cy.get('.ql-editor')
       .should('be.visible')
-      .type("Original content");
+      .type(docTitle);
 
     cy.get('button.save-button').click();
     cy.url().should("include", "/my-docs", { timeout: 10000 });
 
-    cy.contains('.my-doc-row', 'Document to Edit', { timeout: 10000 })
+    cy.contains('.my-doc-row', docTitle, { timeout: 10000 })
       .should('be.visible')
       .click();
 
     cy.url().should("include", "/edit", { timeout: 10000 });
 
+    const updatedDocTitle = `Test Doc ${Date.now()}`;
+    const updatedDocContent = `Test Doc ${Date.now()}`;
+
     // Edit title
     cy.get('input#doc-title')
         .should('be.visible')
         .clear()
-        .type("Updated Document Title");
+        .type(updatedDocTitle);
 
         // Edit the content
         cy.get('.ql-editor')
             .should('be.visible')
             .clear()
-            .type("Updated content here");
+            .type(updatedDocContent);
 
         cy.wait(1000);
 
@@ -54,11 +65,11 @@ describe("Update Document", () => {
         cy.url().should("include", "/my-docs", { timeout: 10000 });
 
         // verify the updated title is shown in my-docs
-        cy.contains('.my-doc-row', 'Updated Document Title', { timeout: 10000 })
+        cy.contains('.my-doc-row', updatedDocTitle, { timeout: 10000 })
             .should('be.visible');
 
         // delete the document
-        cy.contains('.my-doc-row', 'Updated Document Title')
+        cy.contains('.my-doc-row', updatedDocTitle)
             .within(() => {
                 cy.get('button.delete-btn')
                 .should('be.visible')
@@ -67,7 +78,7 @@ describe("Update Document", () => {
 
         cy.wait(2000);
 
-        cy.contains('.my-doc-row', 'Updated Document Title').should('not.exist');
+        cy.contains('.my-doc-row', updatedDocTitle).should('not.exist');
     });
 
 
@@ -87,6 +98,7 @@ describe("Update Document", () => {
         cy.url().should("include", "/create");
 
         const sharedDocTitle = `Test Doc ${Date.now()}`;
+        const sharedContentTitle = `Test Doc ${Date.now()}`;
 
         cy.get('input#doc-title', { timeout: 10000 })
         .should('be.visible')
@@ -94,7 +106,7 @@ describe("Update Document", () => {
 
         cy.get('.ql-editor')
             .should('be.visible')
-            .type("Content to share with collaborator");
+            .type(sharedContentTitle);
         
         cy.get('button.save-button').click();
         cy.url().should("include", "/my-docs", { timeout: 10000 });

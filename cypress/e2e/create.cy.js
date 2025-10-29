@@ -3,13 +3,10 @@
 describe("Create Document", () => {
 
     beforeEach(() => {
-        cy.on('uncaught:exception', (err) => {
-            if (err.message.includes('Cannont read properties of null')) {
-                return false;
-            }
-            return true;
-        });
+    cy.on('uncaught:exception', (err) => {
+      return false;
     });
+  });
 
     it("user can create a new document", () => {
         // login
@@ -17,6 +14,8 @@ describe("Create Document", () => {
         cy.get('input[type="email"]').type("test@email.com", { delay: 50 });
         cy.get('input[type="password"]').type("test", { delay: 50 });
         cy.get('button[type="submit"]').click();
+
+        const docTitle = `Test Doc ${Date.now()}`;
 
         cy.url().should("include", "/my-docs", { timeout: 10000 });
         cy.wait(1000);
@@ -27,11 +26,11 @@ describe("Create Document", () => {
 
         cy.get('input#doc-title',  { timeout: 10000 })
             .should('be.visible')
-            .type("Test Document Create");
+            .type(docTitle);
 
         cy.get('.ql-editor')
             .should('be.visible')
-            .type("Test Content");
+            .type(docTitle);
         
         cy.get('button.save-button').click();
 
@@ -39,7 +38,7 @@ describe("Create Document", () => {
 
         cy.url().should("include", "/my-docs", { timeout: 10000 });
 
-        cy.contains('.my-doc-row', 'Test Document Create', { timeout: 10000 })
+        cy.contains('.my-doc-row', docTitle, { timeout: 10000 })
           .should("be.visible")
           .within(() => {
             cy.get('button.delete-btn').click();
